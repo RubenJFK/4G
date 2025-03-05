@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary</title>
+    <style>
+        @font-face {font-family: Poppins; src: url(../fonts/Poppins-Medium.ttf);}
+        * {font-family: Poppins; margin: 0; padding: 0; box-sizing: border-box;}
+        body {background-color: #efe4e4; margin: 0; display: flex; flex-direction: column; align-items: center; height: 100vh;}
+        nav {background-color: #0056b3; width: 100%; display: flex; justify-content: space-evenly; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); padding: 15px 0;}
+        nav a {text-decoration: none; color: white; margin: 0 10px; font-size: 16px;}
+        nav a:hover {font-weight: bold; color: yellow; cursor: pointer;}
+        #instructions {color: #333; margin-top: 30px; font-size: 25px;}
+        section {background-color: white; padding: 20px; margin: 40px; border-radius: 10px; display: flex; flex-wrap: wrap; justify-content: center; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);}
+        button {padding: 15px; border-radius: 10px; font-size: 70px; cursor: pointer; margin: 10px;}
+        button:hover {background-color: rgb(227, 227, 227); box-shadow: 0 0 15px rgba(0,0,0,0.6); transition: box-shadow 0.2s ease-in-out;}
+        .container {margin: 20px; display: flex; flex-direction: column; justify-content: center;}
+        label {font-size: 20px; margin-top: 10px; text-align: center;}
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="./INDEX.html">↩️ Back to Main Menu</a>
+    </nav>
+
+    <span id="instructions">CLICK ON EACH BUTTON 5 TIMES</span>
+    <section id="container"></section>
+
+    <script>
+        const vocabulary = [
+            { emoji: '🌍🤒', word: 'pandemic', label: 'pandemic', audio: '../voicelines/pandemic.mp3' },
+            { emoji: '🦠➡️', word: 'spread', label: 'spread', audio: '../voicelines/spread.mp3' },
+            { emoji: '↔️👥', word: 'distancing', label: 'distancing', audio: '../voicelines/distancing.mp3' },
+            { emoji: '🚪🔒', word: 'lockdown', label: 'lockdown', audio: '../voicelines/lockdown.mp3' },
+            { emoji: '💉🛡️', word: 'vaccine', label: 'vaccine', audio: '../voicelines/vaccine.mp3' },
+            { emoji: '🫱🏻🫲🏻', word: 'handshake', label: 'handshake', audio: '../voicelines/handshake.mp3' },
+            { emoji: '🧴🫧', word: 'sanitizer', label: 'sanitizer', audio: '../voicelines/sanitizer.mp3' },
+        ];
+
+        const container = document.getElementById('container');
+        const buttons = [];
+
+        vocabulary.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'container';
+            div.innerHTML = `
+                <button onclick="handleButtonClick('${item.word}', this)">${item.emoji}</button>
+                <label>${item.label}</label>
+                <audio id="${item.word}"><source src="${item.audio}" type="audio/mpeg"></audio>
+            `;
+            container.appendChild(div);
+            buttons.push(div.querySelector('button')); // Collect all buttons
+        });
+
+        const clickCounts = {}; // Object to keep track of button clicks
+
+        function playAudio(sound) {
+            const audio = document.getElementById(sound);
+            audio.currentTime = 0; // Reset audio if pressed quickly
+            audio.play();
+        }
+
+        function handleButtonClick(word, buttonElement) {
+            // Disable all buttons immediately
+            buttons.forEach(button => button.disabled = true);
+
+            // Play the audio
+            playAudio(word);
+
+            // Increment click count
+            clickCounts[word] = (clickCounts[word] || 0) + 1;
+
+            // Re-enable all buttons after 1 second
+            setTimeout(() => {
+                buttons.forEach(button => button.disabled = false);
+            }, 1000);
+
+            // Optional: Change the background color if clicked 5 times
+            if (clickCounts[word] === 5) {
+                buttonElement.style.backgroundColor = 'lightblue';
+            }
+        }
+    </script>
+</body>
+</html>

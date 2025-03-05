@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Picture Quiz</title>
+<style>
+    @font-face {font-family: Poppins; src: url(../fonts/Poppins-Medium.ttf);}
+    * {font-family: Poppins; margin: 0; padding: 0; box-sizing: border-box;}
+    body {margin: 0; padding: 0; background-color: #001020; color: white;}
+    nav {background-color: #00274e; width: 100%; display: flex; justify-content: space-evenly; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); padding: 15px 0;}
+    nav a {text-decoration: none; color: white; margin: 0 10px; font-size: 18px;}
+    nav a:hover {font-weight: bold; color: yellow; cursor: pointer;}
+    .container {padding: 20px;}
+    #instructions {text-align: center;}
+    h1 {font-size: 30px; margin-bottom: 10px; margin-top: 30px;}
+    .grid {display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px;}
+    .grid-item {text-align: center;}
+    .grid-item img {width: 230px; height: 230px; object-fit: cover; border-radius: 5px; border: 6px solid #fff; margin-top: 50px;}
+    .grid-item img:hover {cursor: pointer;}
+
+    button {margin-top: 20px; margin-right: 20px; padding: 10px 20px; font-size: 16px; cursor: pointer; background-color: #006bb3; border: none; color: white; border-radius: 5px;}
+    button:hover {background-color: #005899;}
+    button:disabled {background-color: #444444; cursor: not-allowed;}
+    .score {margin-top: 20px; font-size: 18px; font-weight: bold; color: yellow;}
+    #checking-container {display: flex; justify-content: center; align-items: center; margin-top: 20px;}
+</style>
+</head>
+<body>
+    
+    <audio id="click-sound" src="../sounds/SFX browsing 9.wav"></audio>
+<nav>
+    <a href="./INDEX.html"  id="nav-link">↩️ Back to main menu</a>
+</nav>
+
+<div class="container">
+    <div id="instructions">
+        <h1>Which of the following pictures depict people STRETCHING?</h1>
+    </div>
+    <div class="grid" id="imageGrid"></div>
+    <div id="checking-container">
+        <button id="reset-button" onclick="reset()" style="display: none">Do it again</button>
+        <button id="validate" onclick="validateAnswers()">Validate Answers</button>
+        <div class="score" id="score"></div>
+    </div>
+</div>
+
+<script>
+    // document.getElementById('nav-link').addEventListener('click', function(event) {
+    //         event.preventDefault(); // Prevent the default navigation
+
+    //         const clickSound = document.getElementById('click-sound');
+    //         clickSound.play(); // Play the sound
+
+    //         setTimeout(() => {
+    //             window.location.href = this.href; // Navigate to the link after 2 seconds
+    //         }, 1000);
+    //     });
+
+
+    function reset() {
+        location.reload();
+    }
+
+    const images = [
+        //true
+        { src: "../assets/IMAGES/stretch/1.jpg", correct: true },
+        { src: "../assets/IMAGES/stretch/2.jpg", correct: true },
+        { src: "../assets/IMAGES/stretch/3.jpg", correct: true },
+        { src: "../assets/IMAGES/stretch/4.jpg", correct: true },
+        { src: "../assets/IMAGES/stretch/5.jpg", correct: true },
+        { src: "../assets/IMAGES/stretch/6.jpg", correct: true },
+        { src: "../assets/IMAGES/stretch/7.jpg", correct: true },
+        { src: "../assets/IMAGES/stretch/8.jpg", correct: true },
+        { src: "../assets/IMAGES/stretch/9.jpg", correct: true },
+        { src: "../assets/IMAGES/stretch/10.jpg", correct: true },
+
+
+        
+        //false
+        { src: "../assets/IMAGES/ambulance/1.jpg", correct: false },
+        { src: "../assets/IMAGES/ambulance/2.jpg", correct: false },
+        { src: "../assets/IMAGES/ambulance/3.jpg", correct: false },
+        { src: "../assets/IMAGES/ambulance/4.jpg", correct: false },
+
+        { src: "../assets/IMAGES/bacteria/1.jpg", correct: false },
+        { src: "../assets/IMAGES/bacteria/2.jpg", correct: false },
+        { src: "../assets/IMAGES/bacteria/3.jpg", correct: false },
+
+        { src: "../assets/IMAGES/bandage/1.jpg", correct: false },
+        { src: "../assets/IMAGES/bandage/2.jpg", correct: false },
+        { src: "../assets/IMAGES/bandage/3.jpg", correct: false },
+        { src: "../assets/IMAGES/bandage/4.jpg", correct: false },
+        { src: "../assets/IMAGES/bandage/5.jpg", correct: false },
+
+
+        { src: "../assets/IMAGES/crutches/1.jpg", correct: false },
+        { src: "../assets/IMAGES/crutches/2.jpg", correct: false },
+        { src: "../assets/IMAGES/crutches/3.jpg", correct: false },
+        { src: "../assets/IMAGES/crutches/4.jpg", correct: false },
+
+        { src: "../assets/IMAGES/doctor/1.jpg", correct: false },
+        { src: "../assets/IMAGES/doctor/2.jpg", correct: false },
+        { src: "../assets/IMAGES/doctor/3.jpg", correct: false },
+
+        { src: "../assets/IMAGES/first aid kit/1.jpg", correct: false },
+        { src: "../assets/IMAGES/first aid kit/2.jpg", correct: false },
+        { src: "../assets/IMAGES/first aid kit/3.jpg", correct: false },
+        { src: "../assets/IMAGES/first aid kit/4.jpg", correct: false },
+        { src: "../assets/IMAGES/first aid kit/5.jpg", correct: false },
+        { src: "../assets/IMAGES/first aid kit/6.jpg", correct: false },
+
+        { src: "../assets/IMAGES/gloves/1.jpg", correct: false },
+        { src: "../assets/IMAGES/gloves/2.jpg", correct: false },
+        { src: "../assets/IMAGES/gloves/3.jpg", correct: false },
+        { src: "../assets/IMAGES/gloves/4.jpg", correct: false },
+        { src: "../assets/IMAGES/gloves/5.jpg", correct: false },
+
+        { src: "../assets/IMAGES/pills/1.jpg", correct: false },
+        { src: "../assets/IMAGES/pills/2.jpg", correct: false },
+        { src: "../assets/IMAGES/pills/3.jpg", correct: false },
+        { src: "../assets/IMAGES/pills/4.jpg", correct: false },
+        { src: "../assets/IMAGES/pills/5.jpg", correct: false },
+        { src: "../assets/IMAGES/pills/6.jpg", correct: false },
+        { src: "../assets/IMAGES/pills/7.jpg", correct: false },
+
+        { src: "../assets/IMAGES/syringe/1.jpg", correct: false },
+        { src: "../assets/IMAGES/syringe/2.jpg", correct: false },
+        { src: "../assets/IMAGES/syringe/3.jpg", correct: false },
+        { src: "../assets/IMAGES/syringe/4.jpg", correct: false },
+        { src: "../assets/IMAGES/syringe/5.jpg", correct: false },
+        { src: "../assets/IMAGES/syringe/6.jpg", correct: false },
+        { src: "../assets/IMAGES/syringe/7.jpg", correct: false },
+
+        { src: "../assets/IMAGES/hospital monitor/1.jpg", correct: false },
+        { src: "../assets/IMAGES/hospital monitor/2.jpg", correct: false },
+        { src: "../assets/IMAGES/hospital monitor/3.jpg", correct: false },
+        { src: "../assets/IMAGES/hospital monitor/4.jpg", correct: false },
+
+        { src: "../assets/IMAGES/cast/1.jpg", correct: false },
+        { src: "../assets/IMAGES/cast/2.jpg", correct: false },
+        { src: "../assets/IMAGES/cast/3.jpg", correct: false },
+
+
+        
+    ];
+
+    function shuffleArray(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    function displayImages() {
+        const grid = document.getElementById('imageGrid');
+        const shuffledImages = shuffleArray(images);
+
+        shuffledImages.forEach((image, index) => {
+            const div = document.createElement('div');
+            div.classList.add('grid-item');
+            div.innerHTML = `
+                <label>
+                    <input type="checkbox" class="checkbox" data-correct="${image.correct}">
+                    <img src="${image.src}" alt="Image ${index + 1}">
+                </label>
+            `;
+            grid.appendChild(div);
+        });
+
+        document.querySelectorAll('.checkbox').forEach((checkbox) => {
+            checkbox.addEventListener('change', function () {
+                const img = checkbox.closest('label').querySelector('img');
+                const selectSound = new Audio('../sounds/SFX select.wav');
+                const unselectSound = new Audio('../sounds/SFX pop.mp3');
+
+                if (checkbox.checked) {
+                    img.style.borderColor = 'blue';
+                    selectSound.play();
+                } else {
+                    img.style.borderColor = '#fff';
+                    unselectSound.play();
+                }
+                checkSelected();
+            });
+        });
+    }
+
+    function checkSelected() {
+        const checkboxes = document.querySelectorAll('.checkbox');
+        const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+
+        const button = document.getElementById('validate');
+        if (allChecked) {
+            button.disabled = true;
+            alert("You can't select all the pictures!");
+        } else {
+            button.disabled = false;
+        }
+    }
+
+    function validateAnswers() {
+        const button = document.getElementById('validate');
+        button.disabled = true;
+        button.style.backgroundColor = '#444444';
+
+        const bellSound = new Audio('../sounds/SFX bell.wav');
+        bellSound.play();
+
+        const checkboxes = document.querySelectorAll('.checkbox');
+        let correct = 0, totalCorrect = 0, selectedCorrect = 0, selectedWrong = 0;
+
+        checkboxes.forEach(cb => {
+            const img = cb.closest('label').querySelector('img');
+            if (cb.dataset.correct === 'true') totalCorrect++;
+            if (cb.checked && cb.dataset.correct === 'true') selectedCorrect++;
+            if (cb.checked && cb.dataset.correct === 'false') selectedWrong++;
+
+            if (cb.checked && cb.dataset.correct === 'true') {
+                img.style.borderColor = 'green';
+            } else if (cb.checked && cb.dataset.correct === 'false') {
+                img.style.borderColor = 'red';
+            } else {
+                img.style.borderColor = '#fff';
+            }
+        });
+
+        correct = Math.max(0, selectedCorrect - selectedWrong);
+        document.getElementById('score').innerText = 
+            `🏆 Your score: ${correct}/${totalCorrect} points`;
+
+        document.querySelectorAll('.checkbox').forEach((checkbox) => {
+            checkbox.disabled = true;
+        });
+
+        let resetButton = document.getElementById("reset-button");
+        resetButton.style.display = 'block';
+    }
+
+    window.onload = displayImages;
+</script>
+</body>
+</html>

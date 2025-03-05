@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Quiz</title>
+    <style>
+        @font-face {font-family: Poppins; src: url(../fonts/Poppins-Medium.ttf);}
+        * {box-sizing: border-box; font-family: Poppins;}
+        body {margin: 0; padding: 0; background-color: #efe4e4; color: #333; font-size: 16px; line-height: 1.6;}
+        header {background-color: #6a0dad; padding: 20px 0; text-align: center; color: white; font-size: 24px; font-weight: bold;}
+        nav {background-color: #0056b3; width: 100%; display: flex; justify-content: space-evenly; padding: 10px 0; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);}
+        nav a {text-decoration: none; color: white; margin: 0 10px; font-size: 16px;}
+        nav a:hover {font-weight: bold; color: yellow; cursor: pointer;}
+        
+        #transcriptBox {padding: 30px; margin: 30px auto; max-width: 800px; border-radius: 10px; background-color: white; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);}
+        #transcript {margin-top: 20px; display: none;}
+
+        #container {padding: 30px; margin: 30px auto; max-width: 800px; border-radius: 10px; background-color: white; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);}
+        h1 {font-size: 28px; margin-bottom: 20px; color: #6a0dad;}
+        .question {margin: 20px 0;}
+        .question p {font-size: 18px; margin-bottom: 10px; display: flex; align-items: center;}
+        .feedback-icon {font-size: 24px; margin-right: 10px; visibility: hidden;} /* Icon hidden initially */
+        .answers {margin-left: 30px;} /* Indent answers */
+        .answers label {display: block; margin-bottom: 10px; font-size: 16px;}
+        button {padding: 10px 20px; font-size: 16px; background-color: #4CAF50; color: #fff; border: none; border-radius: 4px; cursor: pointer; margin-top: 50px; margin-bottom: 20px;}
+        button:hover {background-color: #45a049;}
+        button:disabled {background-color: #8ab886; cursor: not-allowed;} /* Disabled button style */
+        #result {margin-top: 30px; font-size: 20px; font-weight: bold; color: #4b0082;}
+        #transcriptButton {margin-top: 5px;}
+        @media (max-width: 768px) {
+            #container {margin: 20px; padding: 20px;}
+            h1 {font-size: 24px;}
+            nav a {font-size: 16px;}
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="./INDEX.html">↩️ Back to Main Menu</a>
+    <a href="./STORY.html">💬 Back to Story</a>
+</nav>
+
+<div id="transcriptBox">
+    <button onclick="showTranscript()" id="transcriptButton">See transcript</button>
+    <div id="transcript">
+        <p>👩🏻🎤🧑‍🎨 An interview with VINCENT VAN GOGH</p>
+        <p>👩🏻🎤 <strong>INTERVIEWER:</strong> Hello, Mr. Van Gogh! Thank you for joining me today. How are you?</p>
+        <p>🧑‍🎨 <strong>VAN GOGH:</strong> Hello! I'm happy to talk with you. I feel a little shy, but I’ll do my best.</p>
+        <p>👩🏻🎤 <strong>INTERVIEWER:</strong> Your paintings are so beautiful! Why do you paint so many sunflowers?</p>
+        <p>🧑‍🎨🌻 <strong>VAN GOGH:</strong> Thank you! I love sunflowers because they are bright and full of life. They make me happy, even on sad days.</p>
+        <p>👩🏻🎤 <strong>INTERVIEWER:</strong> That’s wonderful! Do you like painting outside?</p>
+
+    </div>
+</div>
+
+<div id="container">
+    <h1>Interview Quiz</h1>
+    <div id="quiz"></div>
+    <button onclick="submitQuiz()" id="submitButton">Submit Quiz</button>
+    <p id="result"></p>
+</div>
+
+<script>
+    function showTranscript() {
+        let transcript = document.getElementById('transcript');
+        transcript.style.display = transcript.style.display === 'none' ? 'block' : 'none';
+    }
+
+    const questions = [
+    {
+        question: "Who is the ruler of Eldoria?",
+        options: [
+            "King Aldric",
+            "Rowan",
+            "A knight"
+        ],
+        answer: "King Aldric"
+    },
+    {
+        question: "Where do the people of Eldoria live?",
+        options: [
+            "In a big castle",
+            "In small villages",
+            "On a mountain"
+        ],
+        answer: "In small villages"
+    },
+    {
+        question: "Why were the villagers unhappy?",
+        options: [
+            "They had to work too much",
+            "The king took too many taxes",
+            "They did not like the castle"
+        ],
+        answer: "The king took too many taxes"
+    },
+    {
+        question: "Who spoke up against the king?",
+        options: [
+            "A knight",
+            "A blacksmith named Rowan",
+            "A farmer"
+        ],
+        answer: "A blacksmith named Rowan"
+    },
+    {
+        question: "What did the villagers do to change the king’s rules?",
+        options: [
+            "They left Eldoria",
+            "They marched to the castle and protested",
+            "They hid their gold from the king"
+        ],
+        answer: "They marched to the castle and protested"
+    },
+    {
+        question: "How did the villagers break into the castle?",
+        options: [
+            "They used a catapult",
+            "They climbed over the walls",
+            "They asked the king to let them in"
+        ],
+        answer: "They used a catapult"
+    },
+    {
+        question: "What did the king learn in the end?",
+        options: [
+            "That he should be fair to his people",
+            "That he should build stronger walls",
+            "That he needs more gold"
+        ],
+        answer: "That he should be fair to his people"
+    },
+    {
+        question: "What happened to Eldoria after the villagers won?",
+        options: [
+            "It became a fair and happy place",
+            "The villagers left the kingdom",
+            "The king made new unfair rules"
+        ],
+        answer: "It became a fair and happy place"
+    }
+];
+
+
+
+    const quizContainer = document.getElementById('quiz');
+    questions.forEach((q, index) => {
+        const shuffledOptions = [...q.options].sort(() => Math.random() - 0.5); // Shuffle options
+        const div = document.createElement('div');
+        div.className = 'question';
+        div.innerHTML = `
+            <p><span class="feedback-icon" id="icon${index}">✔️</span>${index + 1}. ${q.question}</p>
+            <div class="answers">
+                ${shuffledOptions.map(option => `
+                    <label><input type="radio" name="question${index}" value="${option}"> ${option}</label>
+                `).join('')}
+            </div>
+        `;
+        quizContainer.appendChild(div);
+    });
+
+    function submitQuiz() {
+        let score = 0;
+        questions.forEach((q, index) => {
+            const selectedOption = document.querySelector(`input[name="question${index}"]:checked`);
+            const feedbackIcon = document.getElementById(`icon${index}`);
+
+            if (selectedOption && selectedOption.value === q.answer) {
+                score++;
+                feedbackIcon.textContent = '✔️';
+                feedbackIcon.style.color = 'green';
+            } else {
+                feedbackIcon.textContent = '❌';
+                feedbackIcon.style.color = 'red';
+            }
+            feedbackIcon.style.visibility = 'visible';
+        });
+
+        document.getElementById('result').innerText = `🏆 You got ${score}/${questions.length} correct!`;
+
+        // Disable the Submit button after submission
+        const submitButton = document.getElementById('submitButton');
+        submitButton.disabled = true;
+        submitButton.style.backgroundColor = '#8ab886'; // Change background to indicate it's disabled
+        submitButton.style.cursor = 'not-allowed'; // Change cursor to not-allowed
+    }
+</script>
+
+</body>
+</html>

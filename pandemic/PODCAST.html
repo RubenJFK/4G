@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listening</title>
+    <style>
+        @font-face {font-family: Poppins; src: url(../fonts/Poppins-Medium.ttf);} 
+        * {box-sizing: border-box; font-family: Poppins} 
+        body {margin: 0; padding: 0; background-color: rgb(50, 50, 50); color: white;} 
+        header {background-color: black; padding: 10px 0; text-align: center; color: white; font-size: 1.2em;} 
+        nav {background-color: rgb(35, 35, 35); display: flex; justify-content: space-evenly; padding: 10px 0;} 
+        nav a {text-decoration: none; color: white; margin: 0 10px; font-size: 16px;} 
+        nav a:hover {font-weight: bold; color: yellow;} 
+        main {display: flex;} 
+
+        .emoji-container {flex: 1; padding: 20px; text-align: center; margin-top: 70px;} 
+        .emoji-container span {font-size: 10rem; display: block; margin-bottom: 20px;; animation: pulse 4s infinite;}
+        @keyframes pulse {0%, 100% {transform: scale(1);} 50% {transform: scale(1.1);}} 
+        .audio-player {width: 100%; max-width: 600px; margin: 0 auto;} 
+
+        .question-container {flex: 1; padding: 20px; overflow-y: scroll; max-height: 70vh;} 
+        .question {margin-bottom: 20px;} 
+        .question h3 {display: inline; margin-bottom: 5px;} 
+        .question ul {list-style-type: none; padding: 0;} 
+        .question ul li {margin-bottom: 5px;} 
+
+        .result {margin-top: 10px;}
+        #score {color: rgb(32, 249, 32);}
+        button {margin-top: 10px; padding: 10px; border-radius: 20px;}
+        button:hover {cursor: pointer; background-color: rgb(181, 181, 181);}
+    </style>
+</head>
+<body>
+<header>
+    <h1>PANDEMICS</h1>
+</header>
+<nav>
+    <a href="./INDEX.html">↩️ Back to Main Menu</a>
+</nav>
+<main>
+    <div class="emoji-container">
+        <span>😷 🎙️</span>
+        <audio class="audio-player" controls>
+            <source src="./listening/podcast.mp4" type="audio/mp4">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+    <div class="question-container">
+        <h2>COMPREHENSION QUESTIONS</h2>
+        <div id="questions">
+            <!-- Questions will be inserted here by JavaScript -->
+        </div>
+        <button id="validate-btn">Validate Answers</button>
+        <div id="score" style="margin-top: 10px;"></div>
+    </div>
+</main>
+<script>
+    const questionsData = [
+    {
+        question: "What is art?",
+        options: [
+            "a) A type of sport", 
+            "b) A way people show their feelings and ideas", 
+            "c) Something people eat"
+        ],
+        answer: "b) A way people show their feelings and ideas"
+    },
+    {
+        question: "Which of these is something you can do with art?",
+        options: [
+            "a) Smell it", 
+            "b) Eat it", 
+            "c) See, hear, or touch it"
+        ],
+        answer: "c) See, hear, or touch it"
+    },
+    {
+        question: "What do painters use to make pictures?",
+        options: [
+            "a) Pencils and markers", 
+            "b) Drums and guitars", 
+            "c) Brushes and colors"
+        ],
+        answer: "c) Brushes and colors"
+    },
+    {
+        question: "What do you need for drawing?",
+        options: [
+            "a) Costumes and props", 
+            "b) Pencil, crayons, or markers", 
+            "c) Brushes and colors"
+        ],
+        answer: "b) Pencil, crayons, or markers"
+    },
+    {
+        question: "What kind of art can you hear?",
+        options: [
+            "a) Music", 
+            "b) Theater", 
+            "c) Painting"
+        ],
+        answer: "a) Music"
+    },
+    {
+        question: "What instruments can people play to make music?",
+        options: [
+            "a) Costumes and props", 
+            "b) Piano, guitar, or drums", 
+            "c) Paintbrushes and pencils"
+        ],
+        answer: "b) Piano, guitar, or drums"
+    },
+    {
+        question: "What is dance?",
+        options: [
+            "a) A kind of art where people move to music", 
+            "b) A kind of art that uses props and costumes", 
+            "c) A kind of art you can hear"
+        ],
+        answer: "a) A kind of art where people move to music"
+    },
+    {
+        question: "What do dancers do to tell stories or show feelings?",
+        options: [
+            "a) Jump, spin, or sway", 
+            "b) Play music", 
+            "c) Paint pictures"
+        ],
+        answer: "a) Jump, spin, or sway"
+    },
+    {
+        question: "What do people do in theater?",
+        options: [
+            "a) Sing songs", 
+            "b) Act like characters in a story", 
+            "c) Draw pictures"
+        ],
+        answer: "b) Act like characters in a story"
+    },
+    {
+        question: "What might actors use in theater?",
+        options: [
+            "a) Paintbrushes", 
+            "b) Musical instruments", 
+            "c) Costumes and props"
+        ],
+        answer: "c) Costumes and props"
+    },
+    {
+        question: "Why is art important?",
+        options: [
+            "a) It helps us cook", 
+            "b) It helps us understand each other", 
+            "c) It helps us run faster"
+        ],
+        answer: "b) It helps us understand each other"
+    },
+    {
+        question: "What can art make us do?",
+        options: [
+            "a) Smile, think, or dream", 
+            "b) Cook, clean, or sew", 
+            "c) Run, jump, or swim"
+        ],
+        answer: "a) Smile, think, or dream"
+    },
+    {
+        question: "Do you have to be famous to make art?",
+        options: [
+            "a) Yes, only famous people can make art", 
+            "b) No, anyone can make art", 
+            "c) Only artists can make art"
+        ],
+        answer: "b) No, anyone can make art"
+    },
+    {
+        question: "What kinds of art can anyone try?",
+        options: [
+            "a) Drawing, singing, or dancing", 
+            "b) Playing sports", 
+            "c) Flying airplanes"
+        ],
+        answer: "a) Drawing, singing, or dancing"
+    },
+    {
+        question: "What can some paintings show?",
+        options: [
+            "a) Trees, animals, or people", 
+            "b) Clouds and rain", 
+            "c) Food and drinks"
+        ],
+        answer: "a) Trees, animals, or people"
+    },
+    {
+        question: "What else can paintings be?",
+        options: [
+            "a) Numbers and math problems", 
+            "b) Just shapes and colors", 
+            "c) Words and sentences"
+        ],
+        answer: "b) Just shapes and colors"
+    },
+    {
+        question: "How can art help us understand each other?",
+        options: [
+            "a) By teaching math", 
+            "b) By showing feelings and ideas", 
+            "c) By cooking meals"
+        ],
+        answer: "b) By showing feelings and ideas"
+    },
+    {
+        question: "What does the text suggest you do to start making art?",
+        options: [
+            "a) Write a long story", 
+            "b) Grab some paper and crayons", 
+            "c) Buy a computer"
+        ],
+        answer: "b) Grab some paper and crayons"
+    },
+    {
+        question: "What can music make you feel?",
+        options: [
+            "a) Happy, calm, or excited", 
+            "b) Hungry and tired", 
+            "c) Sleepy and bored"
+        ],
+        answer: "a) Happy, calm, or excited"
+    },
+    {
+        question: "What does the text ask at the end?",
+        options: [
+            "a) Why is art so hard?", 
+            "b) What kind of art will you make today?", 
+            "c) Do you like music?"
+        ],
+        answer: "b) What kind of art will you make today?"
+    }
+];
+
+
+
+
+    function renderQuestions() {
+        const questionsDiv = document.getElementById("questions");
+        questionsData.forEach((questionObj, index) => {
+            const questionElement = document.createElement("div");
+            questionElement.classList.add("question");
+            questionElement.innerHTML = `
+                <span class="emoji" id="emoji${index}"></span> <h3>${index + 1}. ${questionObj.question}</h3>
+                <ul>
+                    ${questionObj.options.map(option => `
+                        <li>
+                            <label>
+                                <input type="radio" name="question${index}" value="${option}">
+                                ${option}
+                            </label>
+                        </li>
+                    `).join("")}
+                </ul>
+            `;
+            questionsDiv.appendChild(questionElement);
+        });
+    }
+
+    document.getElementById("validate-btn").addEventListener("click", () => {
+        const scoreDiv = document.getElementById("score");
+        scoreDiv.innerHTML = ""; // Clear previous score
+        let score = 0; // Initialize score
+
+        questionsData.forEach((questionObj, index) => {
+            const selectedOption = document.querySelector(`input[name="question${index}"]:checked`);
+            const emojiSpan = document.getElementById(`emoji${index}`);
+            if (selectedOption) {
+                const isCorrect = selectedOption.value === questionObj.answer;
+                const mark = isCorrect ? "✅" : "❌"; // Determine the mark
+                emojiSpan.innerText = mark; // Set emoji in the span
+                if (isCorrect) {
+                    score++; // Increment score for correct answer
+                }
+            } else {
+                emojiSpan.innerText = "❌"; // Mark unanswered questions with a cross emoji
+            }
+        });
+
+        // Display score
+        scoreDiv.innerHTML = `🏆 Correct answers: ${score}/${questionsData.length}`;
+    });
+
+    // Render the questions
+    renderQuestions();
+</script>
+</body>
+</html>

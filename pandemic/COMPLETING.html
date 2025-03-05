@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete the Sentences</title>
+    <style>
+        @font-face {font-family: Poppins; src: url(../fonts/Poppins-Medium.ttf);}
+        * {font-family: Poppins;}
+
+        body {margin: 0; padding: 0; background: #2a2e42; color: #e0e0e0; display: flex; justify-content: center; align-items: center; flex-direction: column; min-height: 100vh; text-align: center;}
+
+        nav {background-color: #000000; width: 100%; padding: 15px 0; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);}
+        nav a {text-decoration: none; color: #e0e0e0; font-size: 18px; font-weight: bold; transition: color 0.3s;}
+        nav a:hover {color: #ffcc00;}
+
+        hr {border: 1px solid #e0e0e0; margin: 50px auto; width: 80%;}
+
+        #container {padding: 20px; margin: 20px auto; width: 70%; border-radius: 15px; background-color: #1a1d2e; box-shadow: 0 0 15px rgba(0, 0, 0, 0.7); text-align: center;}
+        button {padding: 12px 25px; font-size: 18px; background-color: #3d3d3d; color: #e0e0e0; border: none; border-radius: 6px; cursor: pointer; transition: background-color 0.3s, opacity 0.3s; margin-top: 40px;}
+        button:hover {background-color: #525252;}
+        button:disabled {background-color: #777; cursor: not-allowed; opacity: 0.6;}
+
+        .question-container {margin-top: 20px; display: flex; align-items: center; justify-content: flex-start; text-align: left;}
+        .question-container p {margin-left: 10px; flex-grow: 1;}
+        select {padding: 10px; font-size: 16px; border-radius: 4px; border: none; background-color: #4d4d4d; color: #e0e0e0;}
+        .correct {background-color: #4caf50; color: #e0e0e0;}
+        .incorrect {background-color: #a64d47; color: #e0e0e0;}
+        .score {font-weight: bold; font-size: 1.5em; margin-top: 20px;}
+        .emoji {font-size: 4em; margin-right: 20px;}
+        #instructions {font-weight: bold; margin-bottom: 20px;}
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="./INDEX.html">↩️ Back to Main Menu</a>
+</nav>
+<div id="container">
+    <h1>Complete the Sentences</h1>
+    <p id="instructions">INSTRUCTIONS: Select the missing word to complete each sentence.</p>
+
+    <!-- Questions Container -->
+    <div id="questions">
+        <!-- Questions are inserted here dynamically -->
+    </div>
+
+    <button id="checkBtn" onclick="checkAnswers()">Check Answers</button>
+    <p class="score" id="score"></p>
+</div>
+
+<script>
+    const exercises = [
+    // definition sentences 
+    { emoji: "👨‍🔬📝", question: "An ", options: ["invention", "idea", "artwork"], answer: "invention", end: " is something new that is created to solve a problem." },
+    { emoji: "🖋️🔍", question: "An ", options: ["inventor", "artist", "teacher"], answer: "inventor", end: " is a person who creates new things." },
+    { emoji: "👀📚", question: "To ", options: ["observe", "draw", "sleep"], answer: "observe", end: " means to look closely at something." },
+    { emoji: "✍️🎨", question: "To ", options: ["design", "study", "paint"], answer: "design", end: " means to plan how something will look." },
+    { emoji: "🧠📖", question: "Da Vinci studied ", options: ["history", "anatomy", "sports"], answer: "anatomy", end: " to understand how the human body works." },
+    { emoji: "📚✍️", question: "Da Vinci kept many ", options: ["pictures", "notes", "stories"], answer: "notes", end: " to record his ideas and discoveries." },
+    { emoji: "⏳📅", question: "Da Vinci lived during the ", options: ["future", "past", "Renaissance"], answer: "Renaissance", end: " period, which was a time of great art and learning." },
+    
+    // normal sentences
+    { emoji: "🖌️🧑‍🎨", question: "Da Vinci was a famous ", options: ["invention", "artist", "scientist"], answer: "artist", end: " who painted the Mona Lisa." },
+    { emoji: "🎨✍️", question: "Da Vinci loved to ", options: ["study", "draw", "run"], answer: "draw", end: " many different things." },
+    { emoji: "🖋️👀", question: "Da Vinci would ", options: ["observe", "ignore", "break"], answer: "observe", end: " nature to inspire his art." },
+    { emoji: "🖼️📝", question: "Da Vinci would make many ", options: ["notes", "inventions", "games"], answer: "notes", end: " in his sketchbooks." },
+    { emoji: "🧠⚡", question: "As an ", options: ["artist", "inventor", "actor"], answer: "inventor", end: " Da Vinci created many amazing machines." },
+    { emoji: "📚✍️", question: "In the ", options: ["Renaissance", "future", "stone age"], answer: "Renaissance", end: " period, Da Vinci made important discoveries." }
+];
+
+
+    // Function to shuffle options
+    function shuffleOptions(options) {
+        for (let i = options.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [options[i], options[j]] = [options[j], options[i]];
+        }
+        return options;
+    }
+
+    function renderQuestions() {
+        const container = document.getElementById("questions");
+        exercises.forEach((exercise, index) => {
+            const shuffledOptions = shuffleOptions([...exercise.options]); // Shuffle options
+            const optionsHtml = shuffledOptions.map(option => `<option value="${option}">${option}</option>`).join("");
+            container.innerHTML += `
+                <div class="question-container">
+                    <span class="emoji">${exercise.emoji}</span>
+                    <p>${index + 1}. ${exercise.question} <select id="q${index}">
+                        <option value="">-- Select --</option>${optionsHtml}
+                    </select> ${exercise.end}</p>
+                </div>
+            `;
+        });
+    }
+
+    function checkAnswers() {
+        let score = 0;
+        exercises.forEach((exercise, index) => {
+            const select = document.getElementById(`q${index}`);
+            if (select.value === exercise.answer) {
+                select.classList.add("correct");
+                select.classList.remove("incorrect");
+                score++;
+            } else {
+                select.classList.add("incorrect");
+                select.classList.remove("correct");
+            }
+        });
+        document.getElementById("score").textContent = `🏆 Your score: ${score}/${exercises.length}`;
+
+        // Disable the button after it's clicked
+        const checkButton = document.getElementById("checkBtn");
+        checkButton.disabled = true;
+        checkButton.classList.add("disabled");
+    }
+
+    renderQuestions();
+</script>
+</body>
+</html>

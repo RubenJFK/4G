@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diary</title>
+    <style>
+        @font-face {font-family: Poppins; src: url(../fonts/Poppins-Medium.ttf);}
+        * {font-family: Poppins;}
+        body {margin: 0; background-color: #1a1a2e; color: #eaeaea;}
+        .navbar {background-color: #16213e; color: #eaeaea; padding: 1rem; text-align: center;}
+        .navbar a {text-decoration: none; color: white; margin: 0 10px; font-size: 20px;}
+        .navbar a:hover {font-weight: bold; color: yellow; cursor: pointer;}
+        .container {display: flex; height: calc(100vh - 64px);}
+        .left-panel {flex: 1; display: flex; justify-content: center; align-items: center; background-color: #051d3a; flex-direction: column;}
+        #emoji {font-size: 17rem;}
+        #title {font-size: 2rem;}
+        .right-panel {flex: 2; padding: 2rem; overflow-y: auto; background-color: #1a1a2e; display: flex; flex-direction: column; justify-content: space-between;}
+        .entry-text {font-size: 1.5rem; line-height: 1.6; margin-bottom: 2rem;}
+        .navigation-buttons {display: flex; justify-content: space-between;}
+        .button {background-color: #16213e; color: #eaeaea; border: none; padding: 0.8rem 1.5rem; font-size: 1rem; cursor: pointer; border-radius: 5px;}
+        .button:hover {background-color: #0f3460;}
+        .link-button {text-align: center; margin-top: 2rem;}
+        .link-button a {background-color: #020f68; color: #ffffff; padding: 0.8rem 1.5rem; text-decoration: none; border-radius: 5px;}
+        .link-button a:hover {background-color: #031485;}
+        #image-container {display: flex; justify-content: center; text-align: center;}
+        img {height: 350px; border-radius: 300px;}
+        .text {font-size: 2.1rem;}
+        #questions-screen {display: none; flex-direction: column; justify-content: center; align-items: center;}
+        .question-container {margin: 20px;}
+        .question {font-size: 1.5rem;}
+        .options {margin: 10px;}
+        .options button {margin: 5px; padding: 0.8rem 1.5rem; background-color: #16213e; color: #eaeaea; border: none; cursor: pointer; border-radius: 5px;}
+        .options button:hover {background-color: #0f3460;}
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="./INDEX.html">↩️ Back to main menu</a>
+    </div>
+
+    <div class="container">
+        <div class="left-panel">
+            <span id="emoji">📓</span>
+            <span id="title">Diary by a Thief</span>
+        </div>
+        <div class="right-panel">
+            <div id="entry" class="entry-text"></div>
+            <div class="navigation-buttons">
+                <button id="prevBtn" class="button">Previous</button>
+                <button id="nextBtn" class="button">Next</button>
+            </div>
+            <div id="linkContainer" class="link-button" style="display: none;">
+                <button class="button" id="goToQuestionsBtn">Go to Questions</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="questions-screen">
+        <h2>Answer the questions</h2>
+        <div id="question-container" class="question-container">
+            <!-- Questions will be loaded here dynamically -->
+        </div>
+        <button class="button" id="backToDiaryBtn">Back to Diary</button>
+    </div>
+
+    <script>
+        const entries = [
+            "<div id='image-container'> <img src='../assets/PIC officer.avif'></div>",
+            "<span class='text'>Day 1:</span><br> Today, I went to the park to talk to the people. Some kids were playing soccer, and I smiled at them. I told them it’s important to play fair and respect others. They listened and promised to be kind to everyone. I felt happy because I helped them understand why following the rules is important.",
+            "<span class='text'>Day 2:</span><br> Today, I saw a group of people throwing trash on the street. I asked them to stop and explained that it's important to keep our city clean. They looked surprised, but then they picked up the trash and threw it in the bin. I was proud because they listened to me and made our neighborhood better.",
+            "<span class='text'>Day 3:</span><br> Today, I saw some people speeding in their cars. I stopped them and told them how dangerous it is to drive too fast. They said they didn’t realize it could hurt someone. They promised to be more careful. I felt good because I helped make the streets safer for everyone.",
+            "<span class='text'>Day 4:</span><br> Today, I visited a school to talk to the students. I told them about the importance of respecting the law and being honest. They asked a lot of questions, and I answered each one. I could see that they were thinking about it. I felt proud because I helped teach them how to be good citizens and respect the law."
+        ];
+
+
+        let currentEntry = 0;
+        const entryDiv = document.getElementById("entry");
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+        const linkContainer = document.getElementById("linkContainer");
+        const questionsScreen = document.getElementById("questions-screen");
+        const goToQuestionsBtn = document.getElementById("goToQuestionsBtn");
+        const backToDiaryBtn = document.getElementById("backToDiaryBtn");
+
+        const pageTurnSound = new Audio("../sounds/SFX page turning.wav");
+
+        function playSound() {
+            pageTurnSound.currentTime = 0;
+            pageTurnSound.play();
+        }
+
+        function updateEntry() {
+            entryDiv.innerHTML = entries[currentEntry];
+            prevBtn.disabled = currentEntry === 0;
+            nextBtn.disabled = currentEntry === entries.length - 1;
+            linkContainer.style.display = currentEntry === entries.length - 1 ? "block" : "none";
+        }
+
+        prevBtn.addEventListener("click", () => {
+            if (currentEntry > 0) {
+                currentEntry--;
+                updateEntry();
+                playSound();
+            }
+        });
+
+        nextBtn.addEventListener("click", () => {
+            if (currentEntry < entries.length - 1) {
+                currentEntry++;
+                updateEntry();
+                playSound();
+            }
+        });
+
+        goToQuestionsBtn.addEventListener("click", () => {
+            document.querySelector(".container").style.display = "none";
+            questionsScreen.style.display = "flex";
+            loadQuestions();
+        });
+
+        backToDiaryBtn.addEventListener("click", () => {
+            questionsScreen.style.display = "none";
+            document.querySelector(".container").style.display = "flex";
+        });
+
+        function loadQuestions() {
+            const questions = [
+    { 
+        question: "What did the police officer tell the kids playing soccer on Day 1?", 
+        options: ["To play fair and respect others", "To stop playing in the park", "To clean up after their game"], 
+        answer: "To play fair and respect others" 
+    },
+    { 
+        question: "What did the people do after the police officer asked them to stop throwing trash on Day 2?", 
+        options: ["Ignored the police officer", "Picked up the trash and threw it in the bin", "Ran away"], 
+        answer: "Picked up the trash and threw it in the bin" 
+    },
+    { 
+        question: "What did the speeding drivers say when the police officer talked to them on Day 3?", 
+        options: ["They didn’t realize it could hurt someone", "They were in a hurry", "They didn’t care"], 
+        answer: "They didn’t realize it could hurt someone" 
+    },
+    { 
+        question: "What type of questions did the students ask the police officer on Day 4?", 
+        options: ["About respecting the law and being honest", "About cleaning the environment", "About playing fair"], 
+        answer: "About respecting the law and being honest" 
+    },
+    { 
+        question: "Why did the police officer feel happy on Day 1?", 
+        options: ["The kids promised to be kind and follow the rules", "The kids invited the narrator to play soccer", "The kids cleaned the park"], 
+        answer: "The kids promised to be kind and follow the rules" 
+    }
+];
+
+
+            const questionContainer = document.getElementById("question-container");
+            questionContainer.innerHTML = ""; // Clear previous questions
+
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement("div");
+                questionDiv.classList.add("question");
+
+                const questionText = document.createElement("p");
+                questionText.innerText = q.question;
+
+                const optionsDiv = document.createElement("div");
+                optionsDiv.classList.add("options");
+
+                q.options.forEach(option => {
+                    const optionBtn = document.createElement("button");
+                    optionBtn.innerText = option;
+                    optionBtn.onclick = () => checkAnswer(option, q.answer, optionBtn);
+                    optionsDiv.appendChild(optionBtn);
+                });
+
+                questionDiv.appendChild(questionText);
+                questionDiv.appendChild(optionsDiv);
+                questionContainer.appendChild(questionDiv);
+            });
+        }
+
+        function checkAnswer(selected, correctAnswer, btn) {
+            if (selected === correctAnswer) {
+                btn.style.backgroundColor = "green";
+            } else {
+                btn.style.backgroundColor = "red";
+            }
+        }
+
+        updateEntry();
+    </script>
+</body>
+</html>

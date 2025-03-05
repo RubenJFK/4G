@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary</title>
+    <style>
+        @font-face {font-family: Poppins; src: url(../fonts/Poppins-Medium.ttf);}
+        * {font-family: Poppins; margin: 0; padding: 0; box-sizing: border-box;}
+        body {background-color: #efe4e4; margin: 0; display: flex; flex-direction: column; align-items: center; height: 100vh;}
+        nav {background-color: #0056b3; width: 100%; display: flex; justify-content: space-evenly; padding: 15px 0; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);}
+        nav a {text-decoration: none; color: white; margin: 0 10px; font-size: 16px;}
+        nav a:hover {font-weight: bold; color: yellow; cursor: pointer;}
+        section {background-color: white; padding: 30px; margin: 40px; border-radius: 10px; display: flex; flex-wrap: wrap; justify-content: center; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);}
+        button {padding: 15px; border-radius: 10px; font-size: 70px; cursor: pointer; margin: 10px;}
+        button:hover {background-color: rgb(227, 227, 227); box-shadow: 0 0 15px rgba(0,0,0,0.6); transition: box-shadow 0.2s ease-in-out;}
+        .container {margin: 20px; display: flex; flex-direction: column; justify-content: center;}
+        label {font-size: 20px; margin-top: 10px; text-align: center;}
+        input {text-align: center; padding: 5px; font-size: 15px;}
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="./INDEX.html">↩️ Back to Main Menu</a>
+    </nav>
+
+    <section id="container"></section>
+
+    <footer id="foot"></footer>
+    <script>
+        const words = [
+            { emoji: "🌍🤒", scrambled: "aicpdmen", word: "pandemic" },
+            { emoji: "🦠➡️", scrambled: "deprsa", word: "spread" },
+            { emoji: "↔️👥", scrambled: "idgnntsicna", word: "distancing" },
+            { emoji: "🚪🔒", scrambled: "owldokcn", word: "lockdown" },
+            { emoji: "💉🛡️", scrambled: "cnevicca", word: "vaccine" },
+            { emoji: "🫱🏻🫲🏻", scrambled: "hkaeandhs", word: "handshake" },
+            { emoji: "🧴🫧", scrambled: "tnaizries", word: "sanitizer" },
+];
+
+
+        const container = document.getElementById("container");
+
+        words.forEach(({ emoji, scrambled, word }) => {
+            const div = document.createElement("div");
+            div.className = "container";
+
+            div.innerHTML = `
+                <button onclick="playAudio('${word}', this)">${emoji}</button>
+                <label>${scrambled}</label>
+                <input type="text" oninput="validateInput(this, '${word}')">
+                <audio id="${word}"><source src="../voicelines/${word}.mp3" type="audio/mpeg"></audio>
+            `;
+
+            container.appendChild(div);
+        });
+
+        function playAudio(sound, button) {
+            const audio = document.getElementById(sound);
+            audio.currentTime = 0;
+            audio.play();
+            const inputField = button.nextElementSibling.nextElementSibling;
+            inputField.focus();
+            inputField.select();
+        }
+
+        function validateInput(input, correctWord) {
+            input.style.backgroundColor = input.value.toLowerCase() === correctWord ? 'lightgreen' : '#FFB5C0';
+        }
+    </script>
+</body>
+</html>

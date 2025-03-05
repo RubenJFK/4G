@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video</title>
+    <style>
+        @font-face {font-family: Poppins; src: url(../fonts/Poppins-Medium.ttf);} 
+        * {box-sizing: border-box; font-family: Poppins} 
+        body {margin: 0; padding: 0; background-color: rgb(50, 50, 50); color: white;} 
+        header {background-color: black; padding: 10px 0; text-align: center; color: white; font-size: 1.2em;} 
+        nav {background-color: rgb(35, 35, 35); display: flex; justify-content: space-evenly; padding: 10px 0;} 
+        nav a {text-decoration: none; color: white; margin: 0 10px; font-size: 16px;} 
+        nav a:hover {font-weight: bold; color: yellow;} 
+        main {display: flex;} 
+        .video-container {flex: 1; padding: 20px;} 
+        #button-container {display: flex; justify-content: space-evenly;} 
+        .question-container {flex: 1; padding: 20px; overflow-y: scroll; max-height: 70vh;} 
+        .question {margin-bottom: 20px;} 
+        .question h3 {display: inline; margin-bottom: 5px;} 
+        .question ul {list-style-type: none; padding: 0;} 
+        .question ul li {margin-bottom: 5px;} 
+        #video1 {max-width: 600px; max-height: 600px; margin-left: 20px; margin-top: 20px;} 
+        .result {margin-top: 10px;} 
+        #score {color: rgb(32, 249, 32);} 
+        button {margin-top: 10px; padding: 10px; border-radius: 20px;} 
+        button:hover {cursor: pointer; background-color: rgb(181, 181, 181);} 
+        button:disabled {background-color: rgb(100, 100, 100); color: gray; cursor: not-allowed;} 
+        .video-buttons {width: 150px;}
+    </style>
+</head>
+<body>
+<header>
+    <h1>PANDEMIC</h1>
+</header>
+<nav>
+    <a href="./INDEX.html">↩️ Back to Main Menu</a>
+</nav>
+<main>
+    <div class="video-container">
+        <video id="video1" controls>
+            <source src="../assets/videos/pandemic.mp4" type="video/mp4">
+            <track src="../assets/VIDEO how potato chips are made.vtt" kind="subtitles" srclang="en" label="English" default>
+            Your browser does not support the video tag.
+        </video>
+        <div id="button-container">
+            <button id="rewind-btn" class="video-buttons">⏪ Rewind</button>
+            <button id="fastforward-btn" class="video-buttons">⏩ Fast-forward</button>
+        </div>
+    </div>
+    <div class="question-container">
+        <h2>COMPREHENSION QUESTIONS</h2>
+        <div id="questions">
+            <!-- Questions will be inserted here by JavaScript -->
+        </div>
+        <button id="validate-btn">Validate Answers</button>
+        <div id="score" style="margin-top: 10px;"></div>
+    </div>
+</main>
+<script>
+    const questionsData = [
+    {
+        question: "Where did most cases of coronavirus come from at the beginning?",
+        options: ["China", "USA", "India", "Brazil"],
+        answer: "China"
+    },
+    {
+        question: "What is another name for the coronavirus disease?",
+        options: ["COVID-19", "SARS", "Flu", "Ebola"],
+        answer: "COVID-19"
+    },
+    {
+        question: "What should you do if you feel sick?",
+        options: ["Visit a doctor", "Go to school", "Play with friends", "Ignore it"],
+        answer: "Visit a doctor"
+    },
+    {
+        question: "How should you cover your mouth when you cough or sneeze?",
+        options: ["With a flexed elbow", "With your hand", "Without covering", "By looking away"],
+        answer: "With a flexed elbow"
+    },
+    {
+        question: "What is the best way to keep your hands clean?",
+        options: ["Wash with warm soapy water", "Wipe on clothes", "Use only water", "Rub with a dry towel"],
+        answer: "Wash with warm soapy water"
+    },
+    {
+        question: "For how many seconds should you wash your hands?",
+        options: ["30 seconds", "5 seconds", "10 seconds", "60 seconds"],
+        answer: "30 seconds"
+    },
+    {
+        question: "What should you use if soap and water are not available?",
+        options: ["Hand sanitizer", "A napkin", "Just air", "A sponge"],
+        answer: "Hand sanitizer"
+    },
+    {
+        question: "What should you do with a used tissue after sneezing?",
+        options: ["Throw it in a closed dustbin", "Keep it in your pocket", "Leave it on the table", "Give it to a friend"],
+        answer: "Throw it in a closed dustbin"
+    },
+    {
+        question: "How can you help stop the spread of the virus?",
+        options: ["Avoid close contact with sick people", "Share food with others", "Hug everyone", "Touch your face a lot"],
+        answer: "Avoid close contact with sick people"
+    },
+    {
+        question: "What can you do to help your parents at home?",
+        options: ["Clean and disinfect objects and surfaces", "Leave things messy", "Avoid cleaning", "Touch everything after playing outside"],
+        answer: "Clean and disinfect objects and surfaces"
+    },
+    {
+        question: "What should you do to help others learn about safety?",
+        options: ["Share information with friends and family", "Keep it a secret", "Ignore safety rules", "Only tell one person"],
+        answer: "Share information with friends and family"
+    },
+    {
+        question: "What is the name of the virus that causes COVID-19?",
+        options: ["SARS-CoV-2", "Ebola", "Influenza", "Common cold"],
+        answer: "SARS-CoV-2"
+    },
+    {
+        question: "Can a person who has recovered from COVID-19 still infect others?",
+        options: ["No", "Yes", "Only for a year", "Forever"],
+        answer: "No"
+    },
+    {
+        question: "What should we remember about past epidemics?",
+        options: ["Humanity has always overcome them", "They never ended", "They were worse", "We cannot stop them"],
+        answer: "Humanity has always overcome them"
+    },
+    {
+        question: "What should we do to stay positive during a pandemic?",
+        options: ["Stay calm and help each other", "Panic and spread fear", "Ignore safety rules", "Stop washing hands"],
+        answer: "Stay calm and help each other"
+    }
+];
+
+
+
+    function shuffleOptions(options) {
+        for (let i = options.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [options[i], options[j]] = [options[j], options[i]];
+        }
+    }
+
+    function renderQuestions() {
+        const questionsDiv = document.getElementById("questions");
+        questionsData.forEach((questionObj, index) => {
+            shuffleOptions(questionObj.options);
+            const questionElement = document.createElement("div");
+            questionElement.classList.add("question");
+            questionElement.innerHTML = `
+                <span class="emoji" id="emoji${index}"></span> <h3>${index + 1}. ${questionObj.question}</h3>
+                <ul>
+                    ${questionObj.options.map(option => `
+                        <li>
+                            <label>
+                                <input type="radio" name="question${index}" value="${option}">
+                                ${option}
+                            </label>
+                        </li>
+                    `).join("")}
+                </ul>
+            `;
+            questionsDiv.appendChild(questionElement);
+        });
+    }
+
+    document.getElementById("validate-btn").addEventListener("click", function() {
+        const scoreDiv = document.getElementById("score");
+        scoreDiv.innerHTML = "";
+        let score = 0;
+
+        questionsData.forEach((questionObj, index) => {
+            const selectedOption = document.querySelector(`input[name="question${index}"]:checked`);
+            const emojiSpan = document.getElementById(`emoji${index}`);
+            if (selectedOption) {
+                const isCorrect = selectedOption.value === questionObj.answer;
+                emojiSpan.innerText = isCorrect ? "✅" : "❌";
+                if (isCorrect) score++;
+            } else {
+                emojiSpan.innerText = "❌";
+            }
+        });
+
+        scoreDiv.innerHTML = `🏆 Correct answers: ${score}/${questionsData.length}`;
+
+        // Disable the validate button
+        this.disabled = true;
+    });
+
+    document.getElementById("rewind-btn").addEventListener("click", () => {
+        const video = document.getElementById("video1");
+        video.currentTime = Math.max(0, video.currentTime - 5);
+    });
+
+    document.getElementById("fastforward-btn").addEventListener("click", () => {
+        const video = document.getElementById("video1");
+        video.currentTime = Math.min(video.duration, video.currentTime + 5);
+    });
+
+    renderQuestions();
+</script>
+</body>
+</html>

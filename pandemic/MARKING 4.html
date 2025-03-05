@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classify Pictures Exercise</title>
+    <style>
+        @font-face {font-family: Poppins; src: url(../fonts/Poppins-Medium.ttf);}
+        * {font-family: Poppins; margin: 0; padding: 0; box-sizing: border-box;}
+        body {margin: 0; padding: 0; background-color: #001020; color: white;}
+        nav {background-color: #00274e; width: 100%; display: flex; justify-content: space-evenly; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); padding: 15px 0;}
+        nav a {text-decoration: none; color: white; margin: 0 10px; font-size: 18px;}
+        nav a:hover {font-weight: bold; color: yellow; cursor: pointer;}
+        .container {padding: 20px;}
+        #instructions {text-align: center;}
+        h1 {font-size: 30px; margin-bottom: 10px; margin-top: 30px;}
+        .grid {display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px;}
+        .grid-item {text-align: center;}
+        .grid-item img {width: 230px; height: 230px; object-fit: cover; border-radius: 5px; border: 10px solid #fff; margin-top: 50px;}
+        .grid-item img:hover {cursor: pointer;}
+        button {margin-top: 20px; margin-right: 20px; padding: 10px 20px; font-size: 16px; cursor: pointer; border: none; background-color: #006bb3; color: white; border-radius: 5px;}
+        button:hover {background-color: #005899;}
+        #green {background-color: green;}
+        #green:disabled {background-color: rgb(0, 82, 0); cursor: not-allowed;}
+        #blue {background-color: blue;}
+        #blue:disabled {background-color: rgb(0, 0, 108); cursor: not-allowed;}
+        #orange {background-color: orange;}
+        #orange:disabled {background-color: rgb(148, 82, 0); cursor: not-allowed;}
+        #purple {background-color: purple;}
+        #purple:disabled {background-color: rgb(168, 20, 88); cursor: not-allowed;}
+        .score {margin-top: 20px; font-size: 18px; font-weight: bold; color: yellow;}
+        #checking-container {display: flex; justify-content: center; align-items: center; margin-top: 20px;}
+        #button-container {text-align: center; margin-bottom: 20px; position: sticky; top: 0; background-color: #001020; z-index: 1000; padding: 10px 0; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);}
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="./INDEX.html">↩️ Back to Main Menu</a>
+    </nav>
+
+    <div class="container">
+        <div id="instructions">
+            <h1>Classify the Pictures</h1>
+            <p>Click a button to select a color, then click on the pictures to classify them:</p>
+        </div>
+
+        <div id="button-container" style="text-align: center; margin-bottom: 20px;">
+            <button id="green">Green = Vaccine</button>
+            <button id="blue">Blue = Handshake</button>
+            <button id="orange">Orange = Hand sanitizer</button>
+            <button id="purple">Purple = Mask</button>
+        </div>
+
+        <div class="grid" id="grid-container"></div>
+
+        <div id="checking-container">
+            <button id="validate">Validate</button>
+            <p class="score" id="score"></p>
+        </div>
+    </div>
+
+    <script>
+        const pictures = [
+            { src: "../assets/IMAGES/syringe/1.jpg", value: "green" },
+            { src: "../assets/IMAGES/syringe/2.jpg", value: "green" },
+            { src: "../assets/IMAGES/syringe/3.jpg", value: "green" },
+            { src: "../assets/IMAGES/syringe/4.jpg", value: "green" },
+            { src: "../assets/IMAGES/syringe/5.jpg", value: "green" },
+            { src: "../assets/IMAGES/syringe/6.jpg", value: "green" },
+            { src: "../assets/IMAGES/syringe/7.jpg", value: "green" },
+
+            { src: "../assets/IMAGES/handshake/1.jpg", value: "blue" },
+            { src: "../assets/IMAGES/handshake/2.jpg", value: "blue" },
+            { src: "../assets/IMAGES/handshake/3.jpg", value: "blue" },
+            { src: "../assets/IMAGES/handshake/4.jpg", value: "blue" },
+            { src: "../assets/IMAGES/handshake/5.jpg", value: "blue" },
+            { src: "../assets/IMAGES/handshake/6.jpg", value: "blue" },
+            { src: "../assets/IMAGES/handshake/7.jpg", value: "blue" },
+            { src: "../assets/IMAGES/handshake/8.jpg", value: "blue" },
+            { src: "../assets/IMAGES/handshake/9.jpg", value: "blue" },
+            { src: "../assets/IMAGES/handshake/10.jpg", value: "blue" },
+
+            { src: "../assets/IMAGES/sanitizer/1.jpg", value: "orange" },
+            { src: "../assets/IMAGES/sanitizer/2.jpg", value: "orange" },
+            { src: "../assets/IMAGES/sanitizer/3.jpg", value: "orange" },
+            { src: "../assets/IMAGES/sanitizer/4.jpg", value: "orange" },
+            { src: "../assets/IMAGES/sanitizer/5.jpg", value: "orange" },
+            { src: "../assets/IMAGES/sanitizer/6.jpg", value: "orange" },
+            { src: "../assets/IMAGES/sanitizer/7.jpg", value: "orange" },
+            { src: "../assets/IMAGES/sanitizer/8.jpg", value: "orange" },
+            { src: "../assets/IMAGES/sanitizer/9.jpg", value: "orange" },
+            { src: "../assets/IMAGES/sanitizer/10.jpg", value: "orange" },
+
+            { src: "../assets/IMAGES/mask/1.jpg", value: "purple" },
+            { src: "../assets/IMAGES/mask/2.jpg", value: "purple" },
+            { src: "../assets/IMAGES/mask/3.jpg", value: "purple" },
+            { src: "../assets/IMAGES/mask/4.jpg", value: "purple" },
+            { src: "../assets/IMAGES/mask/5.jpg", value: "purple" },
+            { src: "../assets/IMAGES/mask/6.jpg", value: "purple" },
+            { src: "../assets/IMAGES/mask/7.jpg", value: "purple" },
+            { src: "../assets/IMAGES/mask/8.jpg", value: "purple" },
+        ];
+
+        const gridContainer = document.getElementById('grid-container');
+        const buttons = {
+            green: document.getElementById('green'),
+            blue: document.getElementById('blue'),
+            orange: document.getElementById('orange'),
+            purple: document.getElementById('purple')
+        };
+        const scoreDisplay = document.getElementById('score');
+        const validateButton = document.getElementById('validate');
+        let selectedColor = null;
+
+        // Load sounds
+        const clickSound = new Audio('../sounds/SFX select 8.wav');
+        const buttonSound = new Audio('../sounds/SFX select 12.wav');
+        const validateSound = new Audio('../sounds/SFX bell.wav');
+
+        // Sound files for voicelines
+        const voicelines = {
+            green: new Audio('../voicelines/vaccine.mp3'),
+            blue: new Audio('../voicelines/handshake.mp3'),
+            orange: new Audio('../voicelines/sanitizer.mp3'),
+            purple: new Audio('../voicelines/mask.mp3')
+        };
+
+        // Shuffle pictures array
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        shuffleArray(pictures);
+
+        // Render images dynamically
+        pictures.forEach((pic, index) => {
+            const div = document.createElement('div');
+            div.classList.add('grid-item');
+            div.innerHTML = `<img src="${pic.src}" data-value="${pic.value}" data-id="${index}">`;
+            gridContainer.appendChild(div);
+        });
+
+        const images = document.querySelectorAll('.grid-item img');
+
+        function playSound(sound) {
+            sound.pause();
+            sound.currentTime = 0;
+            sound.play();
+        }
+
+        Object.keys(buttons).forEach(color => {
+            buttons[color].addEventListener('click', () => {
+                selectedColor = color;
+                Object.values(buttons).forEach(button => button.disabled = false);
+                buttons[color].disabled = true;
+                playSound(buttonSound);
+            });
+        });
+
+        images.forEach(img => {
+            img.addEventListener('click', () => {
+                if (selectedColor) {
+                    img.style.borderColor = selectedColor;
+                    img.dataset.userColor = selectedColor;
+                    playSound(clickSound);
+                    // Play voiceline for selected color
+                    playSound(voicelines[selectedColor]);
+                }
+            });
+        });
+
+        validateButton.addEventListener('click', () => {
+            let score = 0;
+            images.forEach(img => {
+                if (img.dataset.value === img.dataset.userColor) score++;
+            });
+            scoreDisplay.textContent = `Your score: ${score} / ${pictures.length}`;
+            playSound(validateSound);
+        });
+    </script>
+</body>
+</html>

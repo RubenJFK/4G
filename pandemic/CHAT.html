@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dictionary</title>
+    <style>
+        @font-face {font-family: Poppins; src: url(../fonts/Poppins-Medium.ttf);}
+        * {font-family: Poppins; margin: 0; padding: 0; box-sizing: border-box;}
+        body {
+            background-color: #1c1c1c; /* Dark gray background for the body */
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+        }
+        nav {
+            background-color: #333333; /* Dark gray for the nav background */
+            width: 100%;
+            display: flex;
+            justify-content: space-evenly;
+            padding: 15px 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
+        }
+        nav a, nav span {
+            text-decoration: none;
+            color: #e0e0e0; /* Light gray for readability */
+            margin: 0 10px;
+            font-size: 16px;
+        }
+        nav a:hover, nav span:hover {
+            font-weight: bold;
+            color: #ffcc00; /* Gold for a touch of elegance */
+            cursor: pointer;
+        }
+        a {color: #ffcc00;}
+        #lighter {background-color: #4f4f4f; padding: 10px; border-radius: 20px;} /* Lighter gray for highlights */
+        #prompt:hover {cursor: pointer;}
+    
+        section {
+            display: flex;
+            background-color: #2a2a2a; /* Darker gray for the section background */
+            border-radius: 10px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            margin: 20px;
+            align-items: center;
+        }
+        #emoji-container {
+            padding: 10px;
+            margin-right: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #emoji {
+            font-size: 300px;
+            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.7);
+        }
+        #question-container {
+            font-size: 1.2em;
+            padding: 20px;
+            color: #b0bec5; /* Light gray-blue for a frosty accent */
+            line-height: 1.8;
+        }
+        #question-container h1 {
+            color: #ffcc00; /* Gold for holiday cheer */
+            font-size: 2em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6);
+        }
+        #question-container p {
+            margin: 10px 0;
+            font-size: 1em;
+            color: #e0e0e0; /* Light gray for text */
+        }
+        #question-container p:first-of-type {
+            font-size: 1.1em;
+            color: #ffcc00; /* Highlight important text in gold */
+            margin-bottom: 15px;
+        }
+    </style>
+    
+    
+</head>
+<body>
+    <nav>
+        <a href="./INDEX.html">↩️ Back to main menu</a>
+    </nav>
+    <section>
+        <div id="emoji-container">
+            <span id="emoji">🧑🏻‍🎨</span>
+        </div>
+        <div id="question-container">
+            <h1 style="color: white">Interview with an ARTIST</h1>
+            <p style="color: white; line-height: 1.2;" >INSTRUCTIONS: You will ask 5-7 questions to your favorite artist. Prepare them by writing them in your notebook. Click on the text down below to copy it 👇🏼.</p>
+            <div id="lighter">
+                <span id="prompt" style="font-style: italic;">"You will now get into the role of a famous artist. Answer my questions using very simple language that a kid can understand. First, ask me who my favorite artist is so you can get into their role."</span>
+            </div>
+            <br><span>Now, go to ChatGPT official website and paste it there.</span><br>
+
+            <br><a href="https://chatgpt.com/" target="_blank">Click here to go to ChatGPT official website.</a>
+        </div>
+    </section>   
+
+    <script>
+        document.getElementById('prompt').addEventListener('click', function() {
+            const textToCopy = this.textContent;
+            navigator.clipboard.writeText(textToCopy)
+                .then(() => alert('Text copied to clipboard!'))
+                .catch(err => console.error('Error copying text: ', err));
+        });
+    </script>
+</body>
+</html>

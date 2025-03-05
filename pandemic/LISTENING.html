@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloze Exercise</title>
+    <style>
+        @font-face {font-family: Poppins; src: url(../fonts/Poppins-Medium.ttf);}
+        * {font-family: Poppins; margin: 0; padding: 0; box-sizing: border-box;}
+        body {background-color: #001020; margin: 0; display: flex; flex-direction: column; align-items: center; height: 100vh; color: #fff;}
+        nav {background-color: #00274e; width: 100%; display: flex; justify-content: space-evenly; padding: 15px 0; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);}
+        nav a {text-decoration: none; color: #d3d3d3; margin: 0 10px; font-size: 16px;}
+        nav a:hover {font-weight: bold; color: #ffffff; cursor: pointer;}
+        nav span {text-decoration: none; color: #d3d3d3; margin: 0 10px; font-size: 16px;}
+        nav span:hover {font-weight: bold; color: #ffffff; cursor: pointer;}
+        
+        section {margin: 50px 100px; background-color: #01203e; padding: 30px; border-radius: 10px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);}
+        h1 {text-align: center;}
+        p {margin-bottom: 15px;}
+
+        select {border: 1px solid #ccc; padding: 5px; width: auto;}
+
+        .validate-btn {background-color: #3d3d3d; color: white; border: none; padding: 10px 20px; cursor: pointer; margin-top: 20px;}
+        .validate-btn:hover {background-color: #595959;}
+        #container {display: flex; flex-direction: column; justify-items: center; align-items: center;}
+        #emoji {font-size: 100px; margin: 20px 0 10px 0; animation: pulse 4s infinite;}
+        @keyframes pulse {0%, 100% {transform: scale(1);} 50% {transform: scale(1.1);}}
+
+        /* Sticky div for audio player */
+        .audio-wrapper {position: sticky; top: 0; z-index: 1000; background-color: #01203e; padding: 20px 0; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); width: 100%; display: flex; justify-content: center; align-items: center; gap: 10px;}
+        audio {flex-grow: 1; margin: 0;}
+        .audio-button {background-color: #ffffff; color: black; border: none; padding: 10px 15px; cursor: pointer; border-radius: 30px; font-size: 1rem; margin: 0px 30px 0px 30px}
+        .audio-button:hover {background-color: #c7c7c7;}
+
+        #exercise-container {line-height: 2.5; font-size: large;}
+        h1 {font-size: 1.9rem;}
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="INDEX.html">↩️ Back to main menu</a>
+    </nav>
+
+    <section>
+        <!-- Audio player inside sticky div -->
+        <div class="audio-wrapper">
+            <button class="audio-button" onclick="rewindAudio()">⏪ Rewind 3s</button>
+            <audio id="audio-player" controls>
+                <source src="./listening/pandemic.mp4" type="audio/mp4">
+                Your browser does not support the audio element.
+            </audio>
+            <button class="audio-button" onclick="fastForwardAudio()">⏩ Forward 6s</button>
+        </div>
+
+        <div id="container">
+            <span id="emoji">🦠🌎🧑🏻‍⚕️🏥😷💉</span>
+
+            <div id="exercise-container">
+                <h1>The COVID 19 pandemic</h1>
+                
+                <p>The COVID-19 pandemic was a time when a new virus spread all over the world. This virus made many people sick, so everyone had to be very careful. It spread easily from person to person, especially when people were close to each other. That’s why doctors and scientists told us to practice social distancing, which means staying at least <select data-answer="six feet"> 
+                    <option value="">--Choose--</option>
+                    <option value="six feet">six feet</option>
+                    <option value="three feet">three feet</option>
+                    <option value="ten feet">ten feet</option>
+                </select> away from others.</p>
+                
+                <p>At the beginning of the pandemic, many countries decided to have a <select data-answer="lockdown">
+                    <option value="">--Choose--</option>
+                    <option value="lockdown">lockdown</option>
+                    <option value="celebration">celebration</option>
+                    <option value="holiday">holiday</option>
+                </select>. This meant that schools, stores, and parks had to close, and people had to stay home to stop the virus from spreading. Families spent more time together at home, and students had to do <select data-answer="online classes">
+                    <option value="">--Choose--</option>
+                    <option value="online classes">online classes</option>
+                    <option value="homework">homework</option>
+                    <option value="in-person classes">in-person classes</option>
+                </select> instead of going to school.</p>
+                
+                <p>One of the most important things people did was wash their hands often and use sanitizer to keep their hands clean. Doctors also told people to wear <select data-answer="masks">
+                    <option value="">--Choose--</option>
+                    <option value="masks">masks</option>
+                    <option value="gloves">gloves</option>
+                    <option value="scarves">scarves</option>
+                </select> and avoid shaking hands, since a handshake could spread germs. Instead of handshakes, many people started <select data-answer="waving">
+                    <option value="">--Choose--</option>
+                    <option value="waving">waving</option>
+                    <option value="hugging">hugging</option>
+                    <option value="bowing">bowing</option>
+                </select> or bumping elbows to greet each other.</p>
+                
+                <p>After a while, scientists worked hard to create a <select data-answer="vaccine">
+                    <option value="">--Choose--</option>
+                    <option value="vaccine">vaccine</option>
+                    <option value="medicine">medicine</option>
+                    <option value="pill">pill</option>
+                </select>. A vaccine helps protect people from getting very sick if they catch the virus. When many people got the vaccine, things started to get better. Schools and stores reopened, and people could see their friends and family again.</p>
+                
+                <p>Even though the pandemic was a difficult time, it also taught us how to take care of each other. By following safety rules, washing our hands, and getting the <select data-answer="vaccine">
+                    <option value="">--Choose--</option>
+                    <option value="vaccine">vaccine</option>
+                    <option value="test">test</option>
+                    <option value="mask">mask</option>
+                </select>, we helped slow the spread of COVID-19 and kept our communities safe.</p>
+                
+
+                
+            </div>
+        </div>
+    
+        <button class="validate-btn" onclick="validateAnswers()">Validate Answers</button>
+    </section>
+
+    <script>
+        function shuffleOptions() {
+            document.querySelectorAll('select').forEach(select => {
+                const options = Array.from(select.options).slice(1); // Exclude the placeholder option
+                for (let i = options.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [options[i], options[j]] = [options[j], options[i]];
+                }
+                select.innerHTML = ''; 
+                select.appendChild(new Option("--Choose--", "")); // Keep the placeholder option
+                options.forEach(option => select.appendChild(option));
+            });
+        }
+    
+        function validateAnswers() {
+            const selects = document.querySelectorAll('select');
+            selects.forEach(select => {
+                const userAnswer = select.value;
+                const correctAnswer = select.getAttribute('data-answer');
+                if (userAnswer === correctAnswer) {
+                    select.style.backgroundColor = 'lightgreen';
+                } else {
+                    select.style.backgroundColor = 'lightcoral';
+                }
+            });
+        }
+    
+        function rewindAudio() {
+            const audio = document.getElementById('audio-player');
+            audio.currentTime -= 3;
+        }
+    
+        function fastForwardAudio() {
+            const audio = document.getElementById('audio-player');
+            audio.currentTime += 6;
+        }
+    
+        window.onload = shuffleOptions;
+    </script>
+    
+</body>
+</html>

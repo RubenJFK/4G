@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Describing</title>
+    <style>
+        @font-face {font-family: Poppins; src: url(../fonts/Poppins-Medium.ttf);}
+        * {font-family: Poppins; margin: 0; padding: 0; box-sizing: border-box;}
+        body {background-color: #001020; margin: 0; display: flex; flex-direction: column; align-items: center; height: 100vh;}
+        nav {background-color: #00274e; width: 100%; display: flex; justify-content: center; padding: 15px 0; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);}
+        nav a {text-decoration: none; color: white; font-size: 18px;}
+        nav a:hover {font-weight: bold; color: yellow; cursor: pointer;}
+        #instructions {color: white; margin-top: 30px; font-size: 25px; text-align: center;}
+        #container {display: flex; width: 90%; justify-content: center; margin-top: 20px; padding: 0 20px;}
+        #main-image-container {flex: 2; display: flex; justify-content: center; align-items: center; padding-right: 40px;}
+        #main-image {height: 400px; max-width: 100%; object-fit: cover; border-radius: 20px; box-shadow: 0 4px 10px rgba(255, 255, 255, 0.3);}
+        #thumbnails-container {flex: 2; display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 30px; justify-items: center; align-items: center; margin-right: 100px;}
+        .thumbnail {width: 100%; height: 80px; object-fit: cover; border-radius: 10px; cursor: pointer; transition: transform 0.3s ease-in-out;}
+        .thumbnail:hover {transform: scale(1.2); box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);}
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="./INDEX.html">↩️ Back to Menu</a>
+    </nav>
+    <section id="instructions">
+        <p>✍🏻 In your notebook, write 5 sentences to describe these pictures.</p>
+    </section>
+    <section id="container">
+        <div id="main-image-container">
+            <img id="main-image" src="../assets/describing/pandemic.avif">
+        </div>
+        <div id="thumbnails-container">
+            <img class="thumbnail" src="../assets/describing/pandemic.avif" onclick="changeImage(this)">
+            <img class="thumbnail" src="../assets/describing/pandemic 4.avif" onclick="changeImage(this)">
+            <!-- <img class="thumbnail" src="../assets/describing/pandemic 2.jpg" onclick="changeImage(this)"> -->
+            <img class="thumbnail" src="../assets/describing/pandemic 6.jpg" onclick="changeImage(this)">
+            <img class="thumbnail" src="../assets/describing/pandemic 7.jpg" onclick="changeImage(this)">
+            <img class="thumbnail" src="../assets/describing/pandemic 3.jpg" onclick="changeImage(this)">
+            <img class="thumbnail" src="../assets/describing/pandemic 5.jpg" onclick="changeImage(this)"> 
+            <img class="thumbnail" src="../assets/describing/pandemic 8.jpg" onclick="changeImage(this)"> 
+        </div>
+    </section>
+    <footer id="foot"></footer>
+    <audio id="select-sound" src="../sounds/SFX select 9.wav"></audio>
+    <script>
+        function changeImage(element) {
+            let audio = document.getElementById("select-sound");
+            audio.pause();  // Stop any currently playing sound
+            audio.currentTime = 0;  // Reset the audio to the beginning
+            document.getElementById("main-image").src = element.src;
+            audio.play();  // Play the sound
+        }
+    </script>
+</body>
+</html>

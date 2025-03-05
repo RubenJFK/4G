@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Environmental Issues and Solutions</title>
+</head>
+<style>
+    body {margin: 50px; font-family: Comic Sans MS;}
+    .wrapper {display: flex; flex-wrap: wrap; justify-content: space-between;}
+    .emoji-container {display: flex; justify-content: center; align-items: center; margin-bottom: 30px; border: solid; padding: 20px; width: 150px; height: 50px;}
+    .emoji {font-size: 50px; text-align: center;}
+</style>
+<body>
+
+    <div class="wrapper" id="emojiWrapper"></div>
+
+    <script>
+        const emojis = [
+    '🧴🫧',
+    '🫱🏻🫲🏻',
+    '💉🛡️',
+    '🚪🔒',
+    '↔️👥',
+    '🦠➡️',
+    '🌍🤒',
+];
+
+
+
+
+        const wrapper = document.getElementById('emojiWrapper');
+        
+        emojis.forEach(emoji => {
+            const emojiContainer = document.createElement('div');
+            emojiContainer.className = 'emoji-container';
+            emojiContainer.innerHTML = `<span class="emoji">${emoji}</span>`;
+            wrapper.appendChild(emojiContainer);
+        });
+    </script>
+        
+</body>
+</html>

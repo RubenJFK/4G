@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary</title>
+    <style>
+    @font-face {font-family: LemonSoda; src: url(../fonts/lemonsoda.otf);}
+    * {font-family: LemonSoda; margin: 0; padding: 0; box-sizing: border-box;}
+    nav {background-color: #0c1422; width: 100%; display: flex; justify-content: space-evenly; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); padding: 15px 0;}
+    nav {color: white; padding: 10px; text-align: center;}
+    nav a {text-decoration: none; color: white; margin: 0 10px; font-size: 16px;}
+    nav a:hover {font-weight: bold; color: #ffd700; cursor: pointer;}
+    body {margin: 0; padding: 0; box-sizing: border-box; background-color: #0a0f26; color: white;}
+    .container {display: flex; flex-direction: row; height: calc(100vh - 50px);}
+    .word-list {width: 20%; padding: 20px; background-color: #0a0b0f; overflow-y: auto; border-right: 1px solid #14161f;}
+    .word-list button {display: block; width: 100%; padding: 10px; margin-bottom: 10px; border: none; background-color: #122c46; font-size: 16px; cursor: pointer; color: white;}
+    .word-list button:hover {background-color: #1e4d7c;}
+    .word-list button.selected {background-color: #177b70; color: white;}
+    .emoji-display {width: 80%; display: flex; justify-content: center; align-items: center; background-color: #0a0f26; flex-direction: column; padding: 20px;}
+    #emojiText {font-size: 200px;}
+    #wordText {font-size: 80px; text-align: center; margin-top: 30px; margin-bottom: 20px;}
+    #translationText {font-size: 30px; text-align: center; color: #ffd700; margin-top: 20px;}
+    #japaneseText {font-size: 30px; text-align: center; color: #ffa500; }
+    @media (max-width: 260px) { #emojiText {font-size: 50px;} #wordText {font-size: 15px;} }
+</style>
+</head>
+<body>
+
+    <nav>
+        <a href="./INDEX.html">↩️ Back to Menu</a>
+    </nav>
+
+<div class="container">
+    <div class="word-list" id="wordList"></div>
+    <div class="emoji-display" id="emojiDisplay">
+        <div id="emojiText">🖱️</div>
+        <div id="wordText">Choose a word</div>
+        <div id="japaneseText"></div>
+        <div id="translationText"></div>
+    </div>
+</div>
+
+<script>
+    const wordData = [ 
+    {word: "pandemic", korean: "전염병 대유행", japanese: "パンデミック", emojis: "🌍🤒", sound: "../voicelines/pandemic.mp3"},
+    {word: "spread", korean: "확산", japanese: "拡散 (かくさん)", emojis: "🦠➡️", sound: "../voicelines/spread.mp3"},
+    {word: "distancing", korean: "사회적 거리두기", japanese: "ソーシャルディスタンス", emojis: "↔️👥", sound: "../voicelines/distancing.mp3"},
+    {word: "lockdown", korean: "봉쇄", japanese: "ロックダウン", emojis: "🚪🔒", sound: "../voicelines/lockdown.mp3"},
+    {word: "vaccine", korean: "백신", japanese: "ワクチン", emojis: "💉🛡️", sound: "../voicelines/vaccine.mp3"},
+    {word: "handshake", korean: "악수", japanese: "握手 (あくしゅ)", emojis: "🫱🏻🫲🏻", sound: "../voicelines/handshake.mp3"},
+    {word: "sanitizer", korean: "손 소독제", japanese: "消毒液 (しょうどくえき)", emojis: "🧴🫧", sound: "../voicelines/sanitizer.mp3"},
+];
+
+
+    const wordList = document.getElementById("wordList");
+    const emojiDisplay = document.getElementById("emojiDisplay");
+    const wordText = document.getElementById("wordText");
+    const translationText = document.getElementById("translationText");
+    const japaneseText = document.getElementById("japaneseText");
+    const emojiText = document.getElementById("emojiText");
+
+    let currentAudio = null;
+
+    wordData.forEach(item => {
+        const button = document.createElement("button");
+        button.textContent = item.word;
+        button.addEventListener("click", () => {
+            // Highlight selected button
+            document.querySelectorAll(".word-list button").forEach(btn => btn.classList.remove("selected"));
+            button.classList.add("selected");
+
+            // Display word, translations, and emojis
+            wordText.textContent = item.word;
+            translationText.textContent = `${item.korean}`;
+            japaneseText.textContent = `${item.japanese}`;
+            emojiText.textContent = item.emojis;
+
+            // Stop the currently playing audio if there is one
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0; // Reset audio to the beginning
+            }
+
+            // Play new pronunciation
+            currentAudio = new Audio(item.sound);
+            currentAudio.play();
+        });
+        wordList.appendChild(button);
+    });
+</script>
+
+</body>
+</html>

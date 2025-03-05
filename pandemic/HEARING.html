@@ -1,0 +1,163 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listening Game</title>
+    <style>
+        * {box-sizing: border-box;}
+        @font-face {font-family: Poppins; src: url(../fonts/Poppins-Medium.ttf);}
+        * {font-family: Poppins;}
+        body {margin: 0; padding: 0; background-color: #efe4e4;}
+        nav {background-color: #0056b3; display: flex; justify-content: space-evenly; padding: 10px 0; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);}
+        nav a {text-decoration: none; color: white; margin: 0 10px; font-size: 16px;}
+        nav a:hover {font-weight: bold; color: yellow; cursor: pointer;}
+        
+        #content-container {display: none; justify-content: space-between; padding: 20px; max-width: 1200px; margin: 0 auto;}
+        #left-container {flex: 1; padding: 20px; margin: 10px; border-radius: 10px; background-color: white; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); width: 30%; height: 350px;}
+        #right-container {padding: 20px; margin: 10px; border-radius: 10px; background-color: white; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); width:70%;}
+        
+        #vegetable-buttons button {font-size: 50px; margin: 15px; padding: 20px;}
+        #exercise-box {font-size: 20px; margin-bottom: 30px; color:white;}
+        #exercise-box:hover {color:black;}
+
+        #timer, #score {font-size: 30px; margin: 20px;}
+        button {padding: 8px 14px; font-size: 9px; border-radius: 10px; cursor: pointer; margin: 15px;}
+        button:hover {background-color: #e1dcdc;}
+
+        .emoji {font-size: 70px;}
+        
+        #intro-screen {display: flex; justify-content: center; align-items: center; flex-direction: column; height: 100vh; text-align: center; font-size: 1.4em;}
+        #intro-screen button {padding: 15px 30px; font-size: 20px; margin-top: 20px; background-color: #0056b3; color: white; border: none; border-radius: 10px;}
+        #intro-screen button:hover {background-color: #007bff;}
+        #reload-button {font-size: 30px;}
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="./INDEX.html">↩️ Back to main menu</a>
+</nav>
+
+<div id="intro-screen">
+    <h1>Welcome to the Listening Game!</h1>
+    <p>🚧 INSTRUCTIONS: Hear and click the matching emoji to earn points. Ready?</p>
+    <button onclick="startGame()">Start</button>
+</div>
+
+<div id="content-container">
+    <div id="left-container">
+        <div id="exercise-box"></div>
+        <div id="timer">⌛ Time: 60s</div>
+        <div id="score">🏆 Score: 0</div>
+        <button id="reload-button" onclick="reload()" style="display:none;">Play again</button>
+    </div>
+    
+    <div id="right-container" id="vegetable-buttons"></div>
+</div>
+
+<audio id="correct-sound" src="../sounds/SFX correct answer 10.wav"></audio>
+<audio id="wrong-sound" src="../sounds/SFX wrong answer 6.mp3"></audio>
+
+<script>
+    
+    const words = [
+        { word: 'sanitizer', emoji: '🧴🫧' },
+        { word: 'handshake', emoji: '🫱🏻🫲🏻' },
+        { word: 'vaccine', emoji: '💉🛡️' },
+        { word: 'lockdown', emoji: '🚪🔒' },
+        { word: 'distancing', emoji: '↔️👥' },
+        { word: 'spread', emoji: '🦠➡️' },
+        { word: 'pandemic', emoji: '🌍🤒' },
+
+    ];
+
+    let currentWord = '';
+    let score = 0;
+    let timer = 60;
+    let gameInterval;
+
+    function loadButtons() {
+        const buttonContainer = document.getElementById('right-container');
+        buttonContainer.innerHTML = '';
+
+        words.forEach(item => {
+            const button = document.createElement('button');
+            button.id = item.word;
+            button.className = 'emoji';
+            button.innerText = item.emoji;
+            button.onclick = () => checkAnswer(item.word);
+            buttonContainer.appendChild(button);
+
+            const audio = document.createElement('audio');
+            audio.id = `${item.word}-audio`;
+            audio.src = `../voicelines/${item.word}.mp3`;
+            buttonContainer.appendChild(audio);
+        });
+    }
+
+    function getRandomWord() {
+        const randomIndex = Math.floor(Math.random() * words.length);
+        currentWord = words[randomIndex].word;
+        document.getElementById('exercise-box').innerText = words[randomIndex].word;
+        playAudio(currentWord);
+    }
+
+    function playAudio(word) {
+        const audioElement = document.getElementById(word + '-audio');
+        if (audioElement) {
+            setTimeout(() => {
+                audioElement.play();
+            }, 1000);
+        }
+    }
+
+    function checkAnswer(selectedWord) {
+        const correctSound = document.getElementById('correct-sound');
+        const wrongSound = document.getElementById('wrong-sound');
+
+        if (selectedWord === currentWord) {
+            score++;
+            if (!correctSound.paused) correctSound.currentTime = 0;
+            correctSound.play();
+        } else {
+            if (!wrongSound.paused) wrongSound.currentTime = 0;
+            wrongSound.play();
+        }
+        document.getElementById('score').innerText = '🏆 Score: ' + score;
+        getRandomWord();
+    }
+
+    function startGame() {
+        document.getElementById('intro-screen').style.display = 'none';
+        document.getElementById('content-container').style.display = 'flex';
+        score = 0;
+        timer = 180;
+        document.getElementById('score').innerText = '🏆 Score: ' + score;
+        document.getElementById('timer').innerText = '⌛ Time: ' + timer + 's';
+        loadButtons();
+        getRandomWord();
+        gameInterval = setInterval(updateTimer, 1000);
+    }
+
+    function updateTimer() {
+    if (timer > 0) {
+        timer--;
+        document.getElementById('timer').innerText = '⌛ Time: ' + timer + 's';
+    } else {
+        clearInterval(gameInterval);
+        alert('Time is up! 🏆 Your score is: ' + score);
+        document.querySelectorAll('#right-container button').forEach(button => button.disabled = true);
+        document.getElementById('reload-button').style.display = 'block';
+    }
+}
+
+
+    function reload() {
+        window.location.reload();
+    }
+</script>
+
+</body>
+</html>

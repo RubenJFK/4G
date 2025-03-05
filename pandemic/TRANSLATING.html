@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matching</title>
+    <style>
+        @font-face {font-family: Poppins; src: url(../fonts/Poppins-Medium.ttf);}
+        * {font-family: Poppins;}
+        body {font-family: Arial, sans-serif; line-height: 1.2; margin: 0; min-height: 100vh; background-color: #001f3f;}
+        .container {display: flex; justify-content: space-between; width: 100%; width: 95%; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); border-radius: 10px; background: #003366;}
+        .image-column {flex: 20%; display: flex; justify-content: center; align-items: center;}
+        .exercise-column {flex: 80%; display: flex; justify-content: center; align-items: center;}
+        
+        section {display: flex; justify-content: center; align-items: center;}
+        nav {background-color: #00264d; display: flex; justify-content:space-evenly; padding: 10px 0; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);}
+        nav a {text-decoration: none; color: #cce7ff; margin: 0 10px; font-size: 18px;}
+        nav a:hover {font-weight: bold; color: yellow; cursor: pointer;}
+        
+        .button {padding: 12px 25px; font-size: 1.1em; background-color: #0056b3; color: white; border: none; cursor: pointer; border-radius: 5px; transition: transform 0.2s, background-color 0.3s; margin-bottom: 20px; margin-right: 20px;}
+        .button:hover {background-color: #004080; transform: scale(1.05);}
+        .button:disabled {background-color: #333; color: #aaa; cursor: not-allowed; transform: none;}
+        
+        .title {text-align: center; font-size: 1.5rem; color: #cce7ff; margin-bottom: 20px;}
+        #big-container {margin-top: 30px;}
+        .message {font-size: 1.5rem; color: #cce7ff; text-align: center; margin-top: 20px;}
+        
+        .image-column img {width: 100%; max-width: 300px; margin-right: 30px;}
+        #answerColumn button {background-color: #00b35f;}
+        
+        .button.selected {background-color: #ffa500;}
+        #answerColumn button.selected {background-color: #ffa500;}
+    </style>
+    
+    
+</head>
+<body>
+    <nav><a href="./INDEX.html">↩️ Back to Main Menu</a></nav>
+    
+    <section>
+        <div id="big-container">
+            <div class="container">
+                <div class="image-column">
+                    <img src="../assets/GIF touching.gif" alt="Descriptive Image">
+                </div>
+                <div class="exercise-column">
+                    <div class="column" id="phraseColumn"></div>
+                    <div class="column" id="answerColumn"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Audio files -->
+        <audio id="selectSound" src="../sounds/pop2.mp3" preload="auto"></audio>
+        <audio id="correctSound" src="../sounds/SFX correct answer 4.wav" preload="auto"></audio>
+        <audio id="wrongSound" src="../sounds/SFX wrong answer 5.wav" preload="auto"></audio>
+        <audio id="gameOverSound" src="../sounds/SFX score.wav" preload="auto"></audio>
+    </section>
+    
+    <script>
+        // This firstSet will contain words that will be used in the sentences in the secondSet
+const firstSet = [
+    { phrase: "pandemic", answer: "팬데믹" },
+    { phrase: "handshake", answer: "악수" },
+    { phrase: "sanitizer", answer: "손 소독제" },
+    { phrase: "spread", answer: "퍼지다" },
+    { phrase: "lockdown", answer: "봉쇄" },
+    { phrase: "distancing", answer: "거리두기" },
+    { phrase: "vaccine", answer: "백신" },
+];
+
+// Each sentence in the second set must contain one word from the firstSet.
+const secondSet = [
+    { phrase: "The pandemic affected people all over the world.", answer: "팬데믹은 전 세계 사람들에게 영향을 미쳤습니다." },
+    { phrase: "We used to greet with a handshake before the pandemic.", answer: "우리는 팬데믹 이전에 악수로 인사했습니다." },
+    { phrase: "Use hand sanitizer to keep your hands clean.", answer: "손을 깨끗이 하려면 손 소독제를 사용하세요." },
+    { phrase: "Germs can spread if we don't wash our hands.", answer: "손을 씻지 않으면 세균이 퍼질 수 있습니다." },
+    { phrase: "During the lockdown, we stayed at home.", answer: "봉쇄 기간 동안 우리는 집에 머물렀습니다." },
+    { phrase: "Social distancing helps prevent the spread of illness.", answer: "사회적 거리두기는 질병 확산을 예방하는 데 도움이 됩니다." },
+    { phrase: "The doctor gave me a vaccine to keep me healthy.", answer: "의사 선생님이 저를 건강하게 지켜주기 위해 백신을 놔주셨습니다." },
+];
+
+
+
+
+
+
+
+
+
+
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        const phraseColumn = document.getElementById("phraseColumn");
+        const answerColumn = document.getElementById("answerColumn");
+        let correctMatches = 0;
+        let totalMatches = firstSet.length;
+        let isGameOver = false;
+        let currentSet = firstSet;
+
+        function displaySet(set) {
+            phraseColumn.innerHTML = "";
+            answerColumn.innerHTML = "";
+            shuffle(set).forEach(item => {
+                const phraseButton = document.createElement("button");
+                phraseButton.classList.add("button");
+                phraseButton.textContent = item.phrase;
+                phraseButton.dataset.match = item.answer;
+                phraseButton.addEventListener("click", () => selectButton(phraseButton, 'phrase'));
+                phraseColumn.appendChild(phraseButton);
+            });
+
+            shuffle(set).forEach(item => {
+                const answerButton = document.createElement("button");
+                answerButton.classList.add("button");
+                answerButton.textContent = item.answer;
+                answerButton.dataset.match = item.answer;
+                answerButton.addEventListener("click", () => selectButton(answerButton, 'answer'));
+                answerColumn.appendChild(answerButton);
+            });
+        }
+
+        displaySet(currentSet);
+
+        let selectedphrase = null;
+        let selectedAnswer = null;
+
+        function selectButton(button, type) {
+            const selectSound = document.getElementById('selectSound');
+            const correctSound = document.getElementById('correctSound');
+            const wrongSound = document.getElementById('wrongSound');
+            
+            if (isGameOver) return;
+            selectSound.play();
+
+            if (type === 'phrase') {
+                if (selectedphrase) selectedphrase.classList.remove("selected");
+                selectedphrase = button;
+            } else {
+                if (selectedAnswer) selectedAnswer.classList.remove("selected");
+                selectedAnswer = button;
+            }
+            button.classList.add("selected"); 
+            checkMatch();
+        }
+
+        function checkMatch() {
+            if (selectedphrase && selectedAnswer) {
+                if (selectedphrase.dataset.match === selectedAnswer.dataset.match) {
+                    selectedphrase.disabled = true;
+                    selectedAnswer.disabled = true;
+                    selectedphrase.style.visibility = "hidden";
+                    selectedAnswer.style.visibility = "hidden";
+
+                    correctMatches++;
+                    document.getElementById('correctSound').play(); 
+                    if (correctMatches === totalMatches) {
+                        if (currentSet === firstSet) {
+                            currentSet = secondSet;
+                            correctMatches = 0;
+                            totalMatches = secondSet.length;
+                            displaySet(secondSet);
+                        } else {
+                            endGame(true);
+                        }
+                    }
+                } else {
+                    document.getElementById('wrongSound').play();
+                }
+
+                selectedphrase.classList.remove("selected");
+                selectedAnswer.classList.remove("selected");
+                selectedphrase = null;
+                selectedAnswer = null;
+            }
+        }
+
+        function endGame(isWin) {
+            document.getElementById('gameOverSound').play();
+            isGameOver = true;
+
+            const message = document.createElement("div");
+            message.classList.add("message");
+            message.textContent = isWin ? "Great! You completed both exercises!" : "Game Over, You Lost!";
+            document.getElementById('big-container').appendChild(message);
+        }
+    </script>
+</body>
+</html>

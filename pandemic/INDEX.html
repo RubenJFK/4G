@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu</title>
+    <style>
+        @font-face {font-family: Poppins; src: url(../fonts/Poppins-Medium.ttf);}
+        * {font-family: Poppins;}
+        body {margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #001020; color: #fff;}
+        header {background-color: #00274e; color: #fff; display: flex; justify-content: center; font-size: 15px;}
+        .main-container {display: flex; height: 350px;}
+        .categories {width: 70%; display: flex; flex-wrap: wrap; gap: 30px; justify-content: center; margin: 20px; padding-right: 20px; }
+        .emoji {font-size: 40px; transition: transform 0.2s ease-in-out;}
+        .emoji:hover {transform: scale(1.2); cursor: pointer;}
+        .text {font-size: 13px;}
+        a {text-decoration: none; color: inherit; display: flex; flex-direction: column; align-items: center;}
+        .image-container {width: 50%; display: flex; justify-content: center; align-items: center; background: #001020; height: 50%; display: flex; flex-direction: column;}
+        .image-container img {width: 400px; height: auto; border-radius: 150px; background-color: #9ebec9;}
+        #gif1 {width: 400px; margin-top: 150px;}
+        h2 {display: flex; margin-bottom: 50px; margin-top: 20px; justify-content: center; font-size: xx-large;}
+        header h1 {font-size: 24px;}
+    </style>
+        
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>PANDEMIC</h1>
+        </div>
+    </header>
+    
+    <main>
+        <h2>Choose an exercise</h2>
+        <div class="main-container">
+            <section class="categories" id="menu">
+                <a href="../index.html">
+                    <span class="emoji">↩️</span>
+                    <span class="text">Back to Main Menu</span>
+                </a>
+            </section>
+            
+            <div class="image-container">
+                <img id="gif1" src="../assets/gif/pandemic.gif">
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        const menuItems = [
+            { href: "./COLORING.html", emoji: "🖍️", text: "Coloring" },
+            // { href: "./GRAPH.html", emoji: "🔗", text: "Graphic organizer" },
+            { href: "./VOCABULARY.html", emoji: "📔", text: "Vocabulary" },
+            { href: "./REPEATING.html", emoji: "🔁", text: "Repeating" },
+            { href: "./SPELLING.html", emoji: "🔠", text: "Spelling" },
+            { href: "./TRANSLATING.html", emoji: "🌐", text: "Translation" },
+            { href: "./HEARING.html", emoji: "🎴", text: "Listening" },
+            { href: "./DESCRIBING.html", emoji: "👁️", text: "Picture" },
+            { href: "./EXPLANATION.html", emoji: "🧑🏻‍🏫", text: "Explanation" },
+            { href: "./LISTENING.html", emoji: "🎧", text: "Listening" },
+            { href: "./VIDEO.html", emoji: "📺", text: "Video" },
+            // { href: "./TRUE.html", emoji: "🤔", text: "True/False" },
+            // { href: "./QUIZ.html", emoji: "❓", text: "Quiz" },
+            // { href: "./CHECKING.html", emoji: "✅", text: "Checking" },
+            // { href: "./DIALOG.html", emoji: "💬", text: "Dialog" },
+            // { href: "./DIARY.html", emoji: "📓", text: "Diary" },
+
+            // REVIEW
+            { href: "#####", emoji: "➡️", text: "REVIEW" },
+            
+            { href: "./MARKING 4.html", emoji: "💉", text: "Pictures" },
+            // { href: "./MARKING.html", emoji: "🔲", text: "Marking" },
+            // { href: "./DRAWING.html", emoji: "✏️", text: "Drawing" },
+            // { href: "./SEARCH.html", emoji: "🔍", text: "Wordsearch" },
+
+            { href: "./VIDEO 2.html", emoji: "📺", text: "Video #2" },
+            { href: "./QUIZ.html", emoji: "❓", text: "Quiz" },
+
+            // { href: "./AUDIO.html", emoji: "👂🏼", text: "Audio" },
+            { href: "./PRONUNCIATION.html", emoji: "🗣️", text: "Pronunciation" },
+            { href: "./PODCAST.html", emoji: "🎙️", text: "Listening" },
+            // { href: "./LISTENING 2.html", emoji: "🎧", text: "Listening" },
+            // { href: "./QUIZ 2.html", emoji: "❓", text: "Quiz" },
+            { href: "./TRUE.html", emoji: "🤔", text: "True/False" },
+            // { href: "./CHECKING 2.html", emoji: "☑️", text: "Checking" },
+
+            // { href: "./COMPLETING.html", emoji: "💭", text: "Sentences" },
+            // { href: "./ROLEPLAY.html", emoji: "👮🏻", text: "Roleplay" },
+            // { href: "./CHAT.html", emoji: "🤖", text: "Chat" },
+            // { href: "./RESEARCH.html", emoji: "🕵🏻", text: "Inquiry" },
+            
+            { href: "./GRAPH.html", emoji: "🔗", text: "Graphic organizer" }
+
+        ];
+
+        const menuContainer = document.getElementById('menu');
+
+        menuItems.forEach(item => {
+            const link = document.createElement('a');
+            link.href = item.href;
+            link.innerHTML = `<span class="emoji">${item.emoji}</span><span class="text">${item.text}</span>`;
+            menuContainer.appendChild(link);
+        });
+    </script>
+</body>
+</html>
