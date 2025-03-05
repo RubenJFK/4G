@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EXERCISE</title>
+    <style>
+        @font-face {font-family: LemonSoda; src: url(../fonts/lemonsoda.otf);}
+        * {font-family: LemonSoda;}
+        body {background-color: #001020; color: white; margin: 0; font-size: 1.2em; display: flex; flex-direction: column; height: 100vh;}
+        #instructions {font-size: 2rem;}
+        nav {background-color: #00274e; padding: 15px; text-align: center; width: 100%; position: fixed; top: 0; left: 0; z-index: 1000; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);}
+        nav a {color: white; text-decoration: none; padding: 10px 20px; margin: 0 10px;}
+        nav a:hover {font-weight: bold; color: yellow; cursor: pointer;}
+
+        section {margin: 100px; display: flex; justify-content: center; align-items: center; flex-direction: column; text-align: center;}
+        .exercise {display: none; flex-direction: column; align-items: center; gap: 30px; height: 70vh;}
+        .left {display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%;}
+        .emoji-container {font-size: 8rem; margin-bottom: 20px;}
+        .input-container {font-size: 1.5rem; padding: 10px; border: 2px solid white; background-color: #00274e; color: white; text-align: center; pointer-events: none; user-select: none; width: 40%; height: 30px;}
+        .right {display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px; width: 100%;}
+
+        .big-btn {font-size: 2.5rem; padding: 15px; background-color: lightgray; color: black; border: none; border-radius: 8px; cursor: pointer; width: 80px; height: 80px; display: flex; justify-content: center; align-items: center;}
+        .big-btn:hover {background-color: #87929b;}
+        .big-btn:disabled {background-color: #444; color: white; cursor: not-allowed;}
+
+        .big-btn:active {transform: scale(0.95);}
+
+        .progress-bar {width: 80%; background-color: #555; border-radius: 5px; overflow: hidden; margin-top: 20px;}
+        .progress-bar-fill {height: 20px; width: 0; background-color: #00ff00;}
+        #validate-button {background-color: green; padding: 10px; font-size: 20px; border-radius: 20px; margin-right: 20px; color: white;}
+        #validate-button:disabled {
+            /* background-color: #444;  */
+            color: white; cursor: not-allowed;}
+
+        #clear-button {background-color: red; padding: 10px; font-size: 20px; border-radius: 20px;margin-right: 20px; color: white;}
+        #repeatAudio {background-color: black; padding: 10px; font-size: 20px; border-radius: 20px;margin-right: 20px;}
+
+        #restart-button {padding: 10px; font-size: 1.2em; border-radius: 20px;}
+        #start-button {padding: 15px; font-size: 1.1em; border-radius: 20px}
+        #exercise {font-size: 2rem;}
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="./INDEX.html">↩️ Back to Main menu</a>
+    </nav>
+
+    <section id="instructions">
+        <h1>Spelling Exercise</h1>
+        <p>Listen to the word and use the letter buttons to spell it correctly. You can click the 🔊 button to hear the word again. Once you finish, click Validate to check your answer. Ready?</p>
+        <button class="btn" onclick="startExercise()" id="start-button">Start Exercise</button>
+    </section>
+
+    <section id="exercise" class="exercise">
+        <div class="left">
+            <div id="emojiContainer" class="emoji-container"></div>
+            <div id="inputText" class="input-container"></div>
+            <div id="progressBar" class="progress-bar">
+                <div id="progressFill" class="progress-bar-fill"></div>
+            </div>
+            <div>
+                <button class="btn" id="repeatAudio">🔊</button>
+                <button class="btn" onclick="validateAnswer()" id="validate-button">Validate</button>
+                <button class="btn" onclick="clearInput()" id="clear-button">Clear</button>
+            </div>
+        </div>
+        <div class="right" id="letterButtons"></div>
+    </section>
+
+    <script>
+        const wordData = {
+            Monday: "🌙📅",
+            Tuesday: "🔥📅",
+            Wednesday: "💧📅",
+            Thursday: "🌲📅",
+            Friday: "🥇📅",
+            Saturday: "🌱📅",
+            Sunday: "☀️📅",
+            wait: "⏳⌛",
+            hurry: "🏃💨",
+            stop: "✋⛔",
+            start: "▶️🏁",
+            finish: "🏆✅",
+            plan: "📋🗓️",
+            remember: "💭🧠",
+            forget: "❓🤔",
+            spend: "💰🕒",
+            waste: "🗑️⏳",
+            pass: "🔜⏩",
+            save: "💾⏱️",
+            count: "🔢⏱️",
+            quick: "⚡🚀",
+            slow: "🐢⏳",
+            early: "🌅⏰",
+            late: "🌙🕙",
+            short: "📉📏",
+            long: "📈📏",
+            busy: "📋💼",
+            free: "🎉🤸",
+};
+
+
+
+        
+
+    
+        const words = Object.keys(wordData);
+        let currentWord = "";
+        let shuffledLetters = [];
+        let currentAnswer = "";
+        let currentIndex = 0;
+        let score = 0;
+    
+        function startExercise() {
+            document.getElementById('instructions').style.display = 'none';
+            document.getElementById('exercise').style.display = 'flex';
+            updateProgressBar();
+            loadWord();
+        }
+    
+        function loadWord() {
+            if (currentIndex >= words.length) {
+                showFinalScore();
+                return;
+            }
+    
+            const validateButton = document.getElementById('validate-button');
+            validateButton.disabled = false; // Enable the Validate button for the new question
+    
+            currentWord = words[currentIndex];
+            currentAnswer = "";
+            shuffledLetters = currentWord.split('').sort(() => Math.random() - 0.5);
+            document.getElementById('inputText').textContent = "";
+            document.getElementById('letterButtons').innerHTML = '';
+            document.getElementById('emojiContainer').textContent = wordData[currentWord];
+    
+            shuffledLetters.forEach(letter => {
+                const btn = document.createElement('button');
+                btn.textContent = letter;
+                btn.className = 'big-btn';
+                btn.onclick = () => addLetter(btn, letter);
+                document.getElementById('letterButtons').appendChild(btn);
+            });
+    
+            playAudio(currentWord);
+        }
+    
+        function addLetter(btn, letter) {
+            currentAnswer += letter;
+            document.getElementById('inputText').textContent = currentAnswer;
+            btn.disabled = true;
+            playSound("../sounds/SFX select.wav");
+        }
+    
+        function validateAnswer() {
+            const validateButton = document.getElementById('validate-button');
+            validateButton.disabled = true; // Disable the Validate button after it's clicked
+    
+            const isCorrect = currentAnswer === currentWord;
+            const soundPath = isCorrect
+                ? "../sounds/SFX correct answer 1.wav"
+                : "../sounds/SFX wrong answer 10.wav";
+    
+            playSound(soundPath);
+            if (isCorrect) {
+                score++;
+            } else {
+                showCorrectAnswer();
+            }
+            currentIndex++;
+            updateProgressBar();
+    
+            setTimeout(() => {
+                loadWord();
+            }, 2000);
+        }
+    
+        function showCorrectAnswer() {
+            document.getElementById('inputText').textContent = `Correct answer: ${currentWord}`;
+        }
+    
+        function clearInput() {
+            currentAnswer = "";
+            document.getElementById('inputText').textContent = currentAnswer;
+            Array.from(document.querySelectorAll('.big-btn')).forEach(btn => btn.disabled = false);
+            playSound("../sounds/SFX pop.mp3");
+        }
+    
+        function playAudio(word) {
+            const utterance = new SpeechSynthesisUtterance(word);
+            utterance.lang = "en-US"; // Set the language to English (US)
+            speechSynthesis.speak(utterance);
+        }
+    
+        function playSound(path) {
+            const audio = new Audio(path);
+            audio.play();
+        }
+    
+        function updateProgressBar() {
+            const progress = ((currentIndex + 1) / words.length) * 100;
+            document.getElementById('progressFill').style.width = `${progress}%`;
+        }
+    
+        function showFinalScore() {
+            document.getElementById('exercise').innerHTML = `
+                <h2>EXERCISE COMPLETED!</h2>
+                <p>🏆 Your score: ${score} out of ${words.length}</p>
+                <button onclick="restartExercise()" id="restart-button">Try again</button>
+            `;
+        }
+    
+        function restartExercise() {
+            currentIndex = 0;
+            score = 0;
+            document.getElementById('exercise').innerHTML = `
+                <div class="left">
+                    <div id="emojiContainer" class="emoji-container"></div>
+                    <div id="inputText" class="input-container"></div>
+                    <div id="progressBar" class="progress-bar">
+                        <div id="progressFill" class="progress-bar-fill"></div>
+                    </div>
+                    <div>
+                        <button class="btn" id="repeatAudio">🔊</button>
+                        <button class="btn" onclick="validateAnswer()" id="validate-button">Validate</button>
+                        <button class="btn" onclick="clearInput()" id="clear-button">Clear</button>
+                    </div>
+                </div>
+                <div class="right" id="letterButtons"></div>
+            `;
+            startExercise();
+        }
+    
+        document.getElementById('repeatAudio').onclick = () => playAudio(currentWord);
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu</title>
+    <style>
+        @font-face {font-family: LemonSoda; src: url(../fonts/lemonsoda.otf);}
+        * {font-family: LemonSoda;}
+        body {margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #001020; color: #fff;}
+        header {background-color: #00274e; color: #fff; display: flex; justify-content: center; font-size: 15px;}
+        .categories {display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 20px; justify-items: stretch; margin: 30px;}
+        .emoji {font-size: 50px; transition: transform 0.2s ease-in-out; margin-right: 5px;}
+        .text {font-size: 18px; color: white;}
+        h2 {display: flex; margin-bottom: 40px; margin-top: 40px; justify-content: center; font-size: xx-large;}
+        a {text-decoration: none; color: inherit; display: flex; flex-direction: column; align-items: center; gap: 10px;}
+        main {margin-bottom: 70px;}
+        .small-group {background-color: #001e3d; border-radius: 30px; padding: 20px; display: flex; flex-direction: column; gap: 10px; cursor: pointer; position: relative; align-items: center; height: 100%;}
+        #specialBox {background-color: #004e42;}
+        
+        /* Hover effect on .small-group instead of .emoji */
+        .small-group:hover .emoji {transform: scale(1.2);}
+        .small-group:hover button {cursor: pointer;}
+        
+        /* Make button cover the entire area of the div */
+        button {background: none; border: none; padding: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; cursor: pointer;}
+        button:focus {outline: none;}
+        #colorized { background-color: #004e42;}
+        
+        /* Make all buttons the same length */
+        .categories button {display: block; width: 100%;}
+        
+        /* Adjust the Back to Main Menu button style */
+        .back-to-menu {grid-column: span 2; text-align: center;}
+        .organizer {display: flex; align-items: center; justify-content: center;}
+    </style>
+        
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>SPELLING</h1>
+        </div>
+    </header>
+    <main>
+        <h2>Choose an exercise</h2>
+        <section class="categories">
+            <button class="small-group back-to-menu" onclick="location.href='../index.html'" id="colorized">
+                <div class="organizer"> 
+                    <span class="emoji">↩️</span>
+                    <span class="text">Back to Main Menu</span>
+                </div>
+            </button>
+            <button class="small-group" onclick="location.href='./camping.html'">
+                <div class="organizer">
+                    <span class="emoji">🏕️</span>
+                    <span class="text">camping #1</span>
+                </div>
+            </button>
+            <button class="small-group" onclick="location.href='./cinema.html'">
+                <div class="organizer">
+                    <span class="emoji">🍿</span>
+                    <span class="text">cinema #1</span>
+                </div>
+            </button>
+            <button class="small-group" onclick="location.href='./sports.html'">
+                <div class="organizer">
+                    <span class="emoji">🏈</span>
+                    <span class="text">sports #1</span>
+                </div>
+            </button>
+            <button class="small-group" onclick="location.href='./comparatives.html'">
+                <div class="organizer">
+                    <span class="emoji">✨</span>
+                    <span class="text">comparatives #1</span>
+                </div>
+            </button>
+            <button class="small-group" onclick="location.href='./people.html'">
+                <div class="organizer">
+                    <span class="emoji">👥</span>
+                    <span class="text">people #1</span>
+                </div>
+            </button>
+            <button class="small-group" onclick="location.href='./review.html'">
+                <div class="organizer">
+                    <span class="emoji">🧠</span>
+                    <span class="text">review #1</span>
+                </div>
+            </button>
+            <button class="small-group" onclick="location.href='./review 2.html'">
+                <div class="organizer">
+                    <span class="emoji">🧠</span>
+                    <span class="text">review #2</span>
+                </div>
+            </button>
+            <button class="small-group" onclick="location.href='./school.html'">
+                <div class="organizer">
+                    <span class="emoji">🎒</span>
+                    <span class="text">School #2</span>
+                </div>
+            </button>
+            <button class="small-group" onclick="location.href='./food.html'">
+                <div class="organizer">
+                    <span class="emoji">🥞</span>
+                    <span class="text">Food #3</span>
+                </div>
+            </button>
+            <button class="small-group" onclick="location.href='./gerund.html'">
+                <div class="organizer">
+                    <span class="emoji">🚵🏻‍♀️</span>
+                    <span class="text">Gerund #4</span>
+                </div>
+            </button>
+            <button class="small-group" onclick="location.href='./occupations.html'">
+                <div class="organizer">
+                    <span class="emoji">🧑🏻‍⚕️</span>
+                    <span class="text">Jobs #2</span>
+                </div>
+            </button>
+            <button class="small-group" onclick="location.href='./gerund 2.html'">
+                <div class="organizer">
+                    <span class="emoji">⛹🏻</span>
+                    <span class="text">Gerund #5</span>
+                </div>
+            </button>
+            <button class="small-group" onclick="location.href='./places.html'">
+                <div class="organizer">
+                    <span class="emoji">⛪</span>
+                    <span class="text">Places #2</span>
+                </div>
+            </button>
+            <button class="small-group" onclick="location.href='./nature.html'">
+                <div class="organizer">
+                    <span class="emoji">🌴</span>
+                    <span class="text">Nature #2</span>
+                </div>
+            </button>
+            <button class="small-group" onclick="location.href='./animals.html'">
+                <div class="organizer">
+                    <span class="emoji">🐒</span>
+                    <span class="text">Animals #3</span>
+                </div>
+            </button>
+            <button class="small-group" onclick="location.href='./household items.html'">
+                <div class="organizer">
+                    <span class="emoji">🛏️</span>
+                    <span class="text">House items #3</span>
+                </div>
+            </button>
+            <button class="small-group" onclick="location.href='./comparatives 2.html'">
+                <div class="organizer">
+                    <span class="emoji">✨</span>
+                    <span class="text">comparatives #2</span>
+                </div>
+            </button>
+            <button class="small-group" onclick="location.href='./simple past.html'">
+                <div class="organizer">
+                    <span class="emoji">👈🏻</span>
+                    <span class="text">Simple past #3</span>
+                </div>
+            </button>
+            <button class="small-group" onclick="location.href='./simple past 2.html'">
+                <div class="organizer">
+                    <span class="emoji">👈🏻</span>
+                    <span class="text">Simple past #4</span>
+                </div>
+            </button>
+            <button class="small-group" onclick="location.href='./time.html'">
+                <div class="organizer">
+                    <span class="emoji">⏳</span>
+                    <span class="text">Time #3</span>
+                </div>
+            </button>
+            <button class="small-group" onclick="location.href='./time 2.html'">
+                <div class="organizer">
+                    <span class="emoji">⏰</span>
+                    <span class="text">Time #4</span>
+                </div>
+            </button>
+
+            <button class="small-group" onclick="location.href='./review 3.html'">
+                <div class="organizer">
+                    <span class="emoji">🧠</span>
+                    <span class="text">review #3</span>
+                </div>
+            </button>
+
+            <button class="small-group" onclick="location.href='./1/present simple.html'" id="colorized">
+                <div class="organizer">
+                    <span class="emoji">🚶🏻‍➡️</span>
+                    <span class="text">Present simple #1</span>
+                </div>
+            </button>
+         
+
+            <button class="small-group" onclick="location.href='./1/breakfast.html'" id="colorized">
+                <div class="organizer">
+                    <span class="emoji">🍳</span>
+                    <span class="text">Breakfast #1</span>
+                </div>
+            </button>
+
+
+
+        </section>
+    </main>
+</body>
+</html>
