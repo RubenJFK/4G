@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watching</title>
+    <style>
+        @font-face {font-family: LemonSoda; src: url(../../fonts/lemonsoda.otf);}
+        * {box-sizing: border-box; font-family: LemonSoda; margin: 0; padding: 0;}
+        body {background-color: #001020; color: white; display: flex; flex-direction: column; align-items: center; height: 100vh;}
+        nav {background-color: #00274e; padding: 15px; text-align: center; width: 100%; position: fixed; top: 0; left: 0; z-index: 1000; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);}
+        nav a {color: white; text-decoration: none; font-size: 1.1rem; padding: 10px 20px;}
+        nav a:hover {font-weight: bold; color: yellow;}
+        main {display: flex; flex: 1; width: 90%; margin-top: 70px; gap: 20px;}
+        .emoji-container {flex: 0.6; text-align: center;}
+        .emoji-container span {font-size: 8rem; display: block; margin-bottom: 30px; margin-top: 40px; animation: pulse 4s infinite;}
+        @keyframes pulse {0%, 100% {transform: scale(1);} 50% {transform: scale(1.2);}}
+        .video-player {width: 100%; max-width: 800px; max-height: 400px;}
+        .control-buttons {display: flex; justify-content: center; gap: 10px; margin-top: 10px;}
+        .control-buttons button {padding: 10px 15px; font-size: 16px; border: none; cursor: pointer; background-color: rgb(56, 56, 57); color: white; border-radius: 30px; width: 180px;}
+        .control-buttons button:hover {background-color: rgb(84, 82, 82);}
+        .video-container {flex: 0.4; padding: 20px; font-size: 1.2em; background: rgba(255, 255, 255, 0.1); border-radius: 10px; max-height: 500px; overflow-y: auto;}
+        .video-container h2 {margin-bottom: 15px; text-align: center;}
+        .video-list {list-style: none; padding: 0;  overflow-y: auto;}
+        .video-list li {padding: 10px; cursor: pointer; border-bottom: 1px solid rgba(255, 255, 255, 0.2); transition: background 0.3s;}
+        .video-list li:hover {background: rgba(255, 255, 255, 0.2);}
+        .video-list li.selected {color: yellow;} /* New class for selected item */
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="../INDEX.html">↩️ Back to Main Menu</a>
+    </nav>
+    <main>
+        <div class="emoji-container">
+            <video class="video-player" controls>
+                <source src="" type="video/mp4">
+                Your browser does not support the video element.
+            </video>
+            <div class="control-buttons">
+                <button id="rewind">⏪ Rewind</button>
+                <button id="fastforward">⏩ Fastforward</button>
+            </div>
+        </div>
+        <div class="video-container">
+            <h2>Episodes</h2>
+            <ul class="video-list">
+                <!-- Videos will be added here dynamically -->
+            </ul>
+        </div>
+    </main>
+    <script>
+        const videoPlayer = document.querySelector('.video-player');
+        const rewindButton = document.getElementById('rewind');
+        const fastForwardButton = document.getElementById('fastforward');
+        const videoListContainer = document.querySelector('.video-list');
+
+        const videos = [
+            "Pingu - Pingu is introduced.mp4", 
+        ];
+
+        function loadVideos() {
+            videos.forEach(video => {
+                let listItem = document.createElement('li');
+                listItem.textContent = video;
+                listItem.addEventListener('click', () => playVideo(video, listItem));
+                videoListContainer.appendChild(listItem);
+            });
+        }
+
+        function playVideo(video, listItem) {
+            videoPlayer.src = `./files/${video}`;
+            videoPlayer.play();
+            
+            // Remove 'selected' class from all items
+            const allListItems = document.querySelectorAll('.video-list li');
+            allListItems.forEach(item => item.classList.remove('selected'));
+
+            // Add 'selected' class to clicked item
+            listItem.classList.add('selected');
+        }
+
+        rewindButton.addEventListener('click', () => {
+            videoPlayer.currentTime = Math.max(0, videoPlayer.currentTime - 3);
+        });
+
+        fastForwardButton.addEventListener('click', () => {
+            videoPlayer.currentTime = Math.min(videoPlayer.duration, videoPlayer.currentTime + 3);
+        });
+
+        loadVideos();
+    </script>
+</body>
+</html>

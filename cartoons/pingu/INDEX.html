@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video List</title>
+    <style>
+        @font-face {font-family: LemonSoda; src: url(../../fonts/lemonsoda.otf);}
+        * {font-family: LemonSoda;}
+        body { background-color: #001020; color: white; margin: 0; font-size: 1.2em; display: flex; flex-direction: column; height: 100vh; align-items: center; }
+        nav { background-color: #00274e; padding: 15px; text-align: center; width: 100%; position: fixed; top: 0; left: 0; z-index: 1000; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); }
+        nav a { color: white; text-decoration: none; padding: 10px 20px; margin: 0 10px; }
+        nav a:hover { font-weight: bold; color: yellow; cursor: pointer; }
+        section {margin: 50px; display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;}
+        .video-item { text-align: center; width: 200px; margin-top: 30px; }
+        .video-item img { width: 100%; border-radius: 10px; cursor: pointer; transition: transform 0.3s ease; }
+        .video-item img:hover { transform: scale(1.05); }
+        .video-item a { display: block; color: white; text-decoration: none; margin-top: 10px; }
+        .video-item a:hover { color: yellow; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="../INDEX.html">↩️ Back to Menu</a>
+    </nav>
+    <section id="video-list"></section>
+    <script>
+        const videos = [
+            { title: "Pingu and the birthday", url: "https://drive.google.com/file/d/17SdyZDBq9DmazjwcUYs73cbkIAydzco0/view", thumbnail: "./thumbnails/birthday.jpg" },
+            { title: "Babysitting", url: "https://drive.google.com/file/d/1kbpAnZflnhTv6wfmLxEluavJT9zz6ylt/view", thumbnail: "./thumbnails/babysitting.jpg" },
+            { title: "The gift", url: "https://drive.google.com/file/d/1o0ym2h7GdP7XpsrxtarJ4jSxDpr27HLH/view", thumbnail: "./thumbnails/gift.jpg" },
+            { title: "The sled", url: "https://drive.google.com/file/d/12SRH7e9vOCduhRWUotBpGCqHtm8ZL6u9/view", thumbnail: "./thumbnails/sled.jpg" },
+            { title: "At the fair", url: "https://drive.google.com/file/d/1rGwZldUEN7Ctez7EyOStiPpB48uwy_KU/view", thumbnail: "./thumbnails/fair.jpg" },
+            { title: "Visiting the kindergarten", url: "https://drive.google.com/file/d/1PbHF-XP-YhEkmQDiErLgM56d-Im4IpNr/view", thumbnail: "./thumbnails/kindergarten.jpg" },
+
+
+
+            { title: "At the hospital", url: "https://drive.google.com/file/d/1YwIJfW72YJibXKgCi_hum08WHbICJZe9/view?usp=sharing", thumbnail: "./thumbnails/hospital.jpg" },
+            { title: "Chores", url: "https://drive.google.com/file/d/1Y61oYjYGSuOlICFflK66pVVL8-gSqtaH/view?usp=sharing", thumbnail: "./thumbnails/chores.jpg" },
+            { title: "Magician", url: "https://drive.google.com/file/d/1Hwl6-aKzn8pcJaYNVIb1TQva9UxC8YLG/view?usp=sharing", thumbnail: "./thumbnails/magician.jpg" },
+            { title: "The gift wrapper", url: "https://drive.google.com/file/d/19S4UjIS-bBbH5GNV7jhGw2iY7htKWjmP/view?usp=sharing", thumbnail: "./thumbnails/wrapper.jpg" },
+            { title: "Surfing on ice", url: "https://drive.google.com/file/d/1zDSXwUUVXRM6R4CDGQ7bvgsD0RLHjNw9/view?usp=sharing", thumbnail: "./thumbnails/surfing.jpg" },
+            { title: "The discovery", url: "https://drive.google.com/file/d/172AfzeLviSMUh44MLH54eJdPN2Bvz5KL/view?usp=sharing", thumbnail: "./thumbnails/discovery.jpg" },
+            { title: "Christmas", url: "https://drive.google.com/file/d/1l7C0-rBSGyA8D3iTdiL7yyWJIRu1JmeM/view?usp=sharing", thumbnail: "./thumbnails/christmas.jpg" },
+            { title: "The broken vase", url: "https://drive.google.com/file/d/1uSec-lucoUxq1RcTCsAF_OQkSUkvRkwx/view?usp=sharing", thumbnail: "./thumbnails/broken.jpg" },
+            { title: "Chef", url: "https://drive.google.com/file/d/1K0f7jBEdSl_l3MoUXnWv8XqtiisoXOE5/view?usp=sharing", thumbnail: "./thumbnails/chef.jpg" },
+            { title: "Noisy friends", url: "https://drive.google.com/file/d/1vnuQYNcrFzQBxbuFw2HRAVKC734rmci_/view?usp=sharing", thumbnail: "./thumbnails/noisy.jpg" },
+            { title: "Sick grandpa", url: "https://drive.google.com/file/d/1ak5yamiRvMynDgkShm9GdiUOS6nY2Tnc/view?usp=sharing", thumbnail: "./thumbnails/grandpa.jpg" },
+            { title: "Icecicles", url: "https://drive.google.com/file/d/1EM1fR1tF9iMN6QHwSr8zzlWihM4C_TXU/view?usp=sharing", thumbnail: "./thumbnails/icecicles.jpg" },
+            { title: "Message in a bottle", url: "https://drive.google.com/file/d/1ppxOeQz4Qkgif64a7qMQMk-bxOd2jyTL/view?usp=sharing", thumbnail: "./thumbnails/message.jpg" },
+            { title: "Archer", url: "https://drive.google.com/file/climbing.jpg", thumbnail: "./thumbnails/archer.jpg" },
+            { title: "Mountain climbing", url: "https://drive.google.com/file/d/1mpGWBqKFA_p_oMJVdlIBe50HKdPsf41S/view?usp=sharing", thumbnail: "./thumbnails/climbing.jpg" },
+            { title: "The postcard", url: "https://drive.google.com/file/d/1alm2YZ-m6H4dHpa2JtgvpHPaBG-NmTmB/view?usp=sharing", thumbnail: "./thumbnails/postcard.jpg" },
+            { title: "Superman", url: "https://drive.google.com/file/d/1O1gQP4WP04v7KUclFx6xyzFmeXNT9wwX/view?usp=sharing", thumbnail: "./thumbnails/superman.jpg" },
+            { title: "Accordion lessons", url: "https://drive.google.com/file/d/17BfcInByaxPrd50Y2IBrxBTOdoXrvyMw/view?usp=sharing", thumbnail: "./thumbnails/accordion.jpg" },
+            { title: "Fishing competition", url: "https://drive.google.com/file/d/1vQ7xRLh-ZPy6nH2VuIGj7PzsK2rGfl9R/view?usp=sharing", thumbnail: "./thumbnails/fishing.jpg" },
+            { title: "Snowball fight", url: "https://drive.google.com/file/d/1YAuX1VlyzjEtEwrSxE1O8P8itdYTY5hG/view?usp=sharing", thumbnail: "./thumbnails/snowball fight.jpg" },
+            { title: "Sliding", url: "https://drive.google.com/file/d/1R8CL5-nwLOj7wVicaXRM-lQJVy0kH_to/view?usp=sharing", thumbnail: "./thumbnails/sliding.jpg" },
+            { title: "The bird mom", url: "https://drive.google.com/file/d/14WfSi6VlCEzB3IoQMc5WeiAphPe_mJ8v/view?usp=sharing", thumbnail: "./thumbnails/bird.jpg" },
+            { title: "Painting", url: "https://drive.google.com/file/d/1bSwfcx1bzz25VWPhxvXYRKwPJcW1tqJu/view?usp=sharing", thumbnail: "./thumbnails/painting.jpg" },
+            { title: "The prank", url: "https://drive.google.com/file/d/1I9Y5vgfsfAIi7HD0GbT4x5_2rVHgydMx/view?usp=sharing", thumbnail: "./thumbnails/prank.jpg" },
+            { title: "The idea", url: "https://drive.google.com/file/d/1i-qLhhRYzNEm4z-trO6G3qShxPLoQDO_/view?usp=sharing", thumbnail: "./thumbnails/The idea.jpg" },
+            { title: "Day off", url: "https://drive.google.com/file/d/1rfvNP0q0aDwWShqtHY89fLWY87AFXdQf/view?usp=sharing", thumbnail: "./thumbnails/Day off.jpg" },
+            { title: "The toy", url: "https://drive.google.com/file/d/1qulpyhV1j5_hvLU3sgfxsZGHDWebpFiu/view?usp=sharing", thumbnail: "./thumbnails/The toy.jpg" },
+            { title: "The stranger", url: "https://drive.google.com/file/d/1SdNJMROAIeSs6yQwbYrWW8Byo4DkXK8-/view?usp=sharing", thumbnail: "./thumbnails/The stranger.jpg" },
+            { title: "Pingu wants attention", url: "https://drive.google.com/file/d/1rF8S410isGlJPJzx37qfPZzQ5Ct42qD-/view?usp=sharing", thumbnail: "./thumbnails/Pingu wants attention.jpg" },
+            { title: "Windy day", url: "https://drive.google.com/file/d/1pZXeTt6HRwPMg-upGfnprrnba6QfjIg6/view?usp=sharing", thumbnail: "./thumbnails/Windy day.jpg" },
+            { title: "The doctor", url: "https://drive.google.com/file/d/1FB1VWF4o-W34Ye357AKjjFVSWCT7IsQ2/view?usp=sharing", thumbnail: "./thumbnails/The doctor.jpg" },
+            { title: "Playing music", url: "https://drive.google.com/file/d/1vIriyzKC5ioe56OiiZun4Zg9QKQp1XfT/view?usp=sharing", thumbnail: "./thumbnails/Playing music.jpg" },
+            { title: "Bouncing", url: "https://drive.google.com/file/d/1nJ5aY-iW4ilDz5YIYKjLAU64_BozFqkt/view?usp=sharing", thumbnail: "./thumbnails/Bouncing.jpg" },
+            { title: "The paper plane", url: "https://drive.google.com/file/d/1rbE2DiIhWjezZMcP0QAWaR66Z3mp7UtW/view?usp=sharing", thumbnail: "./thumbnails/The paper plane.jpg" },
+            { title: "The letter", url: "https://drive.google.com/file/d/1ponOt3nU2rBQ9VKpm_b_bP0MgutPLQCX/view?usp=sharing", thumbnail: "./thumbnails/The letter.jpg" },
+            { title: "Pretending to be sick", url: "https://drive.google.com/file/d/1hzvZekhq8PnVQJUbghTtOl3dqUvbQjBg/view?usp=sharing", thumbnail: "./thumbnails/Pretending to be sick.jpg" },
+            { title: "Going skiing", url: "https://drive.google.com/file/d/1Xn8y4aPIb3O-ouxoSBKsGiT99YGuhSzL/view?usp=sharing", thumbnail: "./thumbnails/Going skiing.jpg" },
+            { title: "Playing hockey", url: "https://drive.google.com/file/d/1gv9p8HHgJonSgIpY7aNGFLwwjzhrjV0_/view?usp=sharing", thumbnail: "./thumbnails/Playing hockey.jpg" },
+            { title: "The igloo", url: "https://drive.google.com/file/d/1YbeNrwXqpMoOcpaLVzUeKvWxQl70U1iw/view?usp=sharing", thumbnail: "./thumbnails/The igloo.jpg" },
+            { title: "Helping the mailman", url: "https://drive.google.com/file/d/1l8WuWc-pH3oujj9y5rekaFbnNj3UnvOG/view?usp=sharing", thumbnail: "./thumbnails/Helping the mailman.jpg" },
+            { title: "Going fishing", url: "https://drive.google.com/file/d/1Yb9c-ed_eLQbe1TsFgG-0Bpzigx-LEnz/view?usp=sharing", thumbnail: "./thumbnails/Going fishing.jpg" },
+            { title: "Hiccup", url: "https://drive.google.com/file/d/1yc6n-YlzUY9x7uP_15vKGTHPm08VPalI/view?usp=sharing", thumbnail: "./thumbnails/Hiccup.jpg" },
+            { title: "Pancakes", url: "https://drive.google.com/file/d/1A_RNcNlbd6gM1QQVvYNW4spYLQ68zMFs/view?usp=sharing", thumbnail: "./thumbnails/Pancakes.jpg" },
+            { title: "Sleepwalking", url: "https://drive.google.com/file/d/1bEA9RS5MVGHOeXfUpWwV1AkGiksfSBXg/view?usp=sharing", thumbnail: "./thumbnails/Sleepwalking.jpg" },
+            { title: "Playing organ", url: "https://drive.google.com/file/d/1FgpIKAelPp56xKKmpZbXmEm1wi1eUyqv/view?usp=sharing", thumbnail: "./thumbnails/Playing organ.jpg" },
+            { title: "The curling stone", url: "https://drive.google.com/file/d/1J2NjLGGZQAFCzX-fAv0ACiYpfSyV2HbL/view?usp=sharing", thumbnail: "./thumbnails/The curling stone.jpg" },
+            { title: "The seagull", url: "https://drive.google.com/file/d/1yOgNCrxvitulWdnCLJ3hCkvorSr-J_U2/view?usp=sharing", thumbnail: "./thumbnails/The seagull.jpg" },
+            { title: "The disadvantage", url: "https://drive.google.com/file/d/18SMbynMiK7vP-EfTXfQ44XNaNma-RFVs/view?usp=sharing", thumbnail: "./thumbnails/The disadvantage.jpg" },
+            { title: "The shadows", url: "https://drive.google.com/file/d/1mNlbsrMCKt3aRnMFjMCOsPUaufxtcXsy/view?usp=sharing", thumbnail: "./thumbnails/The shadows.jpg" },
+            { title: "The gang", url: "https://drive.google.com/file/d/1TYsTr5TfpTnH6V_kJMHpBrwiKK4Rm9mj/view?usp=sharing", thumbnail: "./thumbnails/The gang.jpg" },
+            { title: "Playing tennis", url: "https://drive.google.com/file/d/1cgL8KWNcvg0ljnW9-WO305Uqt6O-87NN/view?usp=sharing", thumbnail: "./thumbnails/Playing tennis.jpg" },
+            { title: "The circus", url: "https://drive.google.com/file/d/1Iv23q_o-ueXNXH9V4z_8SWp1XcHqP_1q/view?usp=sharing", thumbnail: "./thumbnails/The circus.jpg" },
+
+        ];
+
+        // { title: "XXXXXXX", url: "XXXXXXXXX", thumbnail: "./thumbnails/XXXXXXX.jpg" },
+
+        
+        
+        const videoList = document.getElementById("video-list");
+        videos.forEach(video => {
+            const videoItem = document.createElement("div");
+            videoItem.classList.add("video-item");
+            videoItem.innerHTML = `
+                <a href="${video.url}" target="_blank">
+                    <img src="${video.thumbnail}" alt="${video.title}">
+                </a>
+                <a href="${video.url}" target="_blank">${video.title}</a>
+            `;
+            videoList.appendChild(videoItem);
+        });
+    </script>
+</body>
+</html>
