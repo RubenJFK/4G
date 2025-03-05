@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video List</title>
+    <style>
+        @font-face {font-family: LemonSoda; src: url(../../fonts/lemonsoda.otf);}
+        * {font-family: LemonSoda;}
+        body { background-color: #001020; color: white; margin: 0; font-size: 1.2em; display: flex; flex-direction: column; height: 100vh; align-items: center; }
+        nav { background-color: #00274e; padding: 15px; text-align: center; width: 100%; position: fixed; top: 0; left: 0; z-index: 1000; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); }
+        nav a { color: white; text-decoration: none; padding: 10px 20px; margin: 0 10px; }
+        nav a:hover { font-weight: bold; color: yellow; cursor: pointer; }
+        section {margin: 50px; display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;}
+        .video-item { text-align: center; width: 200px; margin-top: 30px; }
+        .video-item img { width: 100%; border-radius: 10px; cursor: pointer; transition: transform 0.3s ease; }
+        .video-item img:hover { transform: scale(1.05); }
+        .video-item a { display: block; color: white; text-decoration: none; margin-top: 10px; }
+        .video-item a:hover { color: yellow; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="../INDEX.html">↩️ Back to Menu</a>
+    </nav>
+    <section id="video-list"></section>
+    <script>
+        const videos = [
+            { title: "A very modern house", url: "https://drive.google.com/file/d/1cGgWUDYqBgTWBfruk6Otwj99MdIQ0-d5/view?usp=sharing", thumbnail: "./thumbnails/A very modern house.jpg" },
+            { title: "The annoying mosquito", url: "https://drive.google.com/file/d/1AHGIBwwnqVg0VKWa-yoZkAbTmc4ZQlyS/view?usp=sharing", thumbnail: "./thumbnails/The annoying mosquito.jpg" },
+            { title: "Riding", url: "https://drive.google.com/file/d/10CB28QGyNjGc4OymPG9fHeFFZfkaFJdY/view?usp=sharing", thumbnail: "./thumbnails/Riding.jpg" },
+            { title: "Healthy body", url: "https://drive.google.com/file/d/1G3lgaQTopq52t1dES2ooFR0WesElVqwJ/view?usp=sharing", thumbnail: "./thumbnails/Healthy body.jpg" },
+            { title: "Pink jet", url: "https://drive.google.com/file/d/1zPj3pbNJTKFl7Nx6SP1_kPYCF2g4jfZX/view?usp=sharing", thumbnail: "./thumbnails/Pink jet.jpg" },
+            { title: "Tickled pink", url: "https://drive.google.com/file/d/1OB8IdZQFLMYlY-LexzoLSMs8nORyuqdx/view?usp=sharing", thumbnail: "./thumbnails/Tickled pink.jpg" },
+            { title: "The pink pill", url: "https://drive.google.com/file/d/1O_tXiV3gwO5zD1hq5dU7ttDWVPmLWXjT/view?usp=sharing", thumbnail: "./thumbnails/The pink pill.jpg" },
+            { title: "Pink pistons", url: "https://drive.google.com/file/d/1nhftsrbXDEc7znUf_1n4Ud1saNOID1EP/view?usp=sharing", thumbnail: "./thumbnails/Pink pistons.jpg" },
+            { title: "Insomnia", url: "https://drive.google.com/file/d/1bLVn3Q8qbUIL-Ek8smeyzvEBmgMCuhah/view?usp=sharing", thumbnail: "./thumbnails/Insomnia.jpg" },
+            { title: "The pink arch", url: "https://drive.google.com/file/d/19URtmWdKhhfx7Oa-pHmzFO1m8gPjxlDA/view?usp=sharing", thumbnail: "./thumbnails/The pink arch.jpg" },
+            { title: "Pink water", url: "https://drive.google.com/file/d/17z5MMSvQ6Yl48-CawWNDkT2-IBMdmnjV/view?usp=sharing", thumbnail: "./thumbnails/Pink water.jpg" },
+            { title: "Pink panic", url: "https://drive.google.com/file/d/1PCWqnT3NZHksnfAXB8eVRJooAQHH-8kN/view?usp=sharing", thumbnail: "./thumbnails/Pink panic.jpg" },
+            { title: "Pink ounce", url: "https://drive.google.com/file/d/1D6q6R3HZtYtdMiv03lSWRvmoSgW8xMn7/view?usp=sharing", thumbnail: "./thumbnails/Pink ounce.jpg" },
+            { title: "Premade", url: "https://drive.google.com/file/d/1yIg2kukeIStBePtm1q4KZa8LzAV2iZFP/view?usp=sharing    ", thumbnail: "./thumbnails/Premade.jpg" },
+            { title: "Sky", url: "https://drive.google.com/file/d/1gVnOl3-ROOUICbVKEm4nN2GWzdfhiLI5/view?usp=sharing", thumbnail: "./thumbnails/Sky.jpg" },
+            { title: "P as in pink", url: "https://drive.google.com/file/d/1zqXyUU5HxWAQJAI08N6UXaEVrKkq9gUa/view?usp=sharing", thumbnail: "./thumbnails/P as in pink.jpg" },
+            { title: "Bullfighting", url: "https://drive.google.com/file/d/1OLO5DNTWZ1XXPU9Ktjh_qhKNgRDHfY9H/view?usp=sharing", thumbnail: "./thumbnails/Bullfighting.jpg" },
+            { title: "The sphynx", url: "https://drive.google.com/file/d/1vNyFD_KWpiQ19jA3HWoEyklcd5bB-Lw0/view?usp=sharing", thumbnail: "./thumbnails/The sphynx.jpg" },
+            { title: "Paint it pink", url: "https://drive.google.com/file/d/1WZB9TQHYxte6Aew76FB1evACdiEfwuK_/view?usp=sharing", thumbnail: "./thumbnails/Paint it pink.jpg" },
+            { title: "Recycled trash", url: "https://drive.google.com/file/d/1ccOako17gHhFnPtr7fDv_S3ykhylnb_-/view?usp=sharing", thumbnail: "./thumbnails/Recycled trash.jpg" },
+            { title: "Wonderful pink", url: "https://drive.google.com/file/d/1KtllOWrI3YImTlXjfh9rUY4qDT4ftdR2/view?usp=sharing", thumbnail: "./thumbnails/Wonderful pink.jpg" },
+            { title: "Brave pink", url: "https://drive.google.com/file/d/1c31PEaEaFEr8g4I5dXXYcdsXsbf8ooHv/view?usp=sharing", thumbnail: "./thumbnails/Brave pink.jpg" },
+            { title: "Pink bait", url: "https://drive.google.com/file/d/18MxpHoG_-QO3ZAOv6UvVBwuUrs8kMBAo/view?usp=sharing", thumbnail: "./thumbnails/Pink bait.jpg" },
+            { title: "The motorbike", url: "https://drive.google.com/file/d/1m95P-9J6otBl2FOUH4CB7E3GairnnICR/view?usp=sharing", thumbnail: "./thumbnails/The motorbike.jpg" },
+            { title: "A nice smile", url: "https://drive.google.com/file/d/1CgPYuXUdF9hLRCB70bq8RbM-dxbzofdd/view?usp=sharing", thumbnail: "./thumbnails/A nice smile.jpg" },
+            { title: "The saw", url: "https://drive.google.com/file/d/1BBV6getrqWb5Q-aKuU96kqrNEOC0qDWG/view?usp=sharing", thumbnail: "./thumbnails/The saw.jpg" },
+            { title: "The genie", url: "https://drive.google.com/file/d/1tJDiBs_Tf7PtZHva5N3sywT9AwdFO-uC/view?usp=sharing", thumbnail: "./thumbnails/The genie.jpg" },
+            { title: "Pinker", url: "https://drive.google.com/file/d/1oo7sSzvZwgVfHmkcbbB55kUNsfo7SZoz/view?usp=sharing", thumbnail: "./thumbnails/Pinker.jpg" },
+            { title: "Hungry", url: "https://drive.google.com/file/d/1Sf72czOxeRwDIjG3rlU5ITJ3Gm2agGoZ/view?usp=sharing", thumbnail: "./thumbnails/Hungry.jpg" },
+            { title: "Extinct", url: "https://drive.google.com/file/d/1jsJX8sK2R3DBC7lKDDSclpFSAjs0g1Uw/view?usp=sharing", thumbnail: "./thumbnails/Extinct.png" },
+            { title: "The recruiter", url: "https://drive.google.com/file/d/1UuMlgAmrQkQCTS2JEDoHYrdA0JoFPaOB/view?usp=sharing", thumbnail: "./thumbnails/The recruiter.jpg" },
+            { title: "Pinkadilly", url: "https://drive.google.com/file/d/1s9bHXZPxfRZUYV3eInQ_zKyN4tgncSmV/view?usp=sharing", thumbnail: "./thumbnails/Pinkadilly.jpg" },
+            { title: "Pink luck", url: "https://drive.google.com/file/d/15kEoEsO1EI__EQRWlNXroaSAXvR7qkgM/view?usp=sharing", thumbnail: "./thumbnails/Pink luck.jpg" },
+            { title: "Pink thief", url: "https://drive.google.com/file/d/1bNy68z5H6EYYehHXZ4tM8zUvWYROSpnY/view?usp=sharing", thumbnail: "./thumbnails/Pink thief.jpg" },
+            { title: "The lamb", url: "https://drive.google.com/file/d/198mG01d0puhwyZdyf6qj9qebq_cR2PMM/view?usp=sharing", thumbnail: "./thumbnails/The lamb.jpg" },
+            { title: "The complot", url: "https://drive.google.com/file/d/1XeaPmtIQbBkerap796KXPvjr9TgIrS-Q/view?usp=sharing", thumbnail: "./thumbnails/The complot.jpg" },
+            { title: "Taxes", url: "https://drive.google.com/file/d/1hp2ooki0FYJqmClvTFYS1E6TppHLVhiC/view?usp=sharing", thumbnail: "./thumbnails/Taxes.jpg" },
+            { title: "Pajamas", url: "https://drive.google.com/file/d/1N3eelxJ6T5G_9pj272iR-30q-s2OYJT9/view?usp=sharing", thumbnail: "./thumbnails/Pajamas.jpg" },
+            { title: "The ice", url: "https://drive.google.com/file/d/1THE_--eAEqWUvAsI_Ii3IJfUdzyrKQPo/view?usp=sharing", thumbnail: "./thumbnails/The ice.jpg" },
+            { title: "Pink shots", url: "https://drive.google.com/file/d/1qX_Fjd3-ZK_9YzRlNhRSbu4QTWdlUyDQ/view?usp=sharing", thumbnail: "./thumbnails/Pink shots.jpg" },
+            { title: "Secret agent", url: "https://drive.google.com/file/d/1OmSLjMhoKFbHo57YIYeJhhXgYkASZhtN/view?usp=sharing", thumbnail: "./thumbnails/Secret agent.jpg" },
+            { title: "Pink soda", url: "https://drive.google.com/file/d/1-po6i2iKOQ7FTtQKFhLm8B3galt1RVxX/view?usp=sharing", thumbnail: "./thumbnails/Pink soda.jpg" },
+            { title: "Vitamins", url: "https://drive.google.com/file/d/1idMuiVC4UlNAsvRSFgvti1mJcYsiaYlE/view?usp=sharing", thumbnail: "./thumbnails/Vitamins.jpg" },
+            { title: "Melody", url: "https://drive.google.com/file/d/1KZAsoKSDirnDAhdGoGytQP_oxIVm8akd/view?usp=sharing", thumbnail: "./thumbnails/Melody.jpg" },
+            { title: "Pink outs", url: "https://drive.google.com/file/d/1d1ueKR7MNhkXWeuRgysiZnmRQsUkoJSB/view?usp=sharing", thumbnail: "./thumbnails/Pink outs.jpg" },
+            { title: "Pink paradise", url: "https://drive.google.com/file/d/1cHc0sjmZO3QXLsN2B5sl8B4TI6vk9PG4/view?usp=sharing", thumbnail: "./thumbnails/Pink paradise.jpg" },
+            { title: "Congratulations", url: "https://drive.google.com/file/d/1Kt-hHrN8ITwAL8wyl4GxOgo8JoQNUkde/view?usp=sharing", thumbnail: "./thumbnails/Congratulations.jpg" },
+            { title: "Psychodelic", url: "https://drive.google.com/file/d/1hyJHZMPcIOpj0lfUkxQFSynk27COzQfO/view?usp=sharing", thumbnail: "./thumbnails/Psychodelic.jpg" },
+            { title: "Pink flowers", url: "https://i.ytimg.com/vi/ObV6-zeFlE4/mqdefault.jpg", thumbnail: "./thumbnails/Pink flowers.jpg" },
+            { title: "Super pink", url: "https://drive.google.com/file/d/1AGpt0Zd2ner_KkI2BTGdFX4CYjk4w5Ql/view?usp=sharing", thumbnail: "./thumbnails/Super pink.jpg" },
+            { title: "Twinkle star", url: "https://drive.google.com/file/d/1WDnUK2HaPnRoOFKaSZ2ERnOlR3E2dJrO/view?usp=sharing", thumbnail: "./thumbnails/Twinkle star.jpg" },
+            { title: "Cold pink", url: "https://drive.google.com/file/d/1IqLyN-fq5CqVyJQTmiDhp2P_zN3jA056/view?usp=sharing", thumbnail: "./thumbnails/Cold pink.jpg" },
+            { title: "Cinderella", url: "https://drive.google.com/file/d/1Jd6gwcK82Q_lfX3_rGQxJBKTI_8koBE1/view?usp=sharing", thumbnail: "./thumbnails/Cinderella.jpg" },
+            { title: "In the pink of night", url: "https://drive.google.com/file/d/1MahtmSd1eyMwaBEAfATH-mU5Az6J7SoP/view?usp=sharing", thumbnail: "./thumbnails/In the pink of night.jpg" },
+            { title: "After pink", url: "https://drive.google.com/file/d/1MahtmSd1eyMwaBEAfATH-mU5Az6J7SoP/view?usp=sharing", thumbnail: "./thumbnails/After pink.jpg" },
+            { title: "Pink panzer", url: "https://drive.google.com/file/d/1MsndKTWX8sfgcjfv23VFmi9W39C5sIWt/view?usp=sharing", thumbnail: "./thumbnails/Pink panzer.jpg" },
+            { title: "Corncobs", url: "https://drive.google.com/file/d/1M112D7CWRURMk77OZ6iarqXPt1tfMDcm/view?usp=sharing", thumbnail: "./thumbnails/Corncobs.jpg" },
+            { title: "The fly", url: "https://drive.google.com/file/d/1U9V-X6MsL-sYrVShwS92nDiudU7e3zN1/view?usp=sharing", thumbnail: "./thumbnails/The fly.jpg" },
+            { title: "The dish", url: "https://drive.google.com/file/d/1BaK8pxTQE4U8-n1uqPvYds5lwrU1Izuf/view?usp=sharing", thumbnail: "./thumbnails/The dish.jpg" },
+            { title: "Pink music", url: "https://drive.google.com/file/d/1C-3qveTdYvmQCjgB8atscH6mVNkS3C1y/view?usp=sharing", thumbnail: "./thumbnails/Pink music.jpg" },
+            { title: "Pink-in", url: "https://drive.google.com/file/d/1zEnVgmMsqeLC4X9dnD1T3pukyxz6BNvv/view?usp=sharing", thumbnail: "./thumbnails/Pink-in.jpg" },
+            { title: "Psst", url: "https://drive.google.com/file/d/1EX_fUlk95axmSQJjb2WpE4U91n1KLTD7/view?usp=sharing", thumbnail: "./thumbnails/Psst.jpg" },
+            { title: "Gong", url: "https://drive.google.com/file/d/1BQrOQ44dbWiN0Yv6HrqwsmVfXwxr_rAE/view?usp=sharing", thumbnail: "./thumbnails/Gong.jpg" },
+            { title: "Stickers", url: "https://drive.google.com/file/d/1eqPo5DFCs-i0Q3dOPUA0nvGWOHFexEi_/view?usp=sharing", thumbnail: "./thumbnails/Stickers.jpg" },
+            { title: "Keep pink", url: "https://drive.google.com/file/d/1Zm9-H-7snt_baJK2aIeZRBMpO0BTrBHl/view?usp=sharing", thumbnail: "./thumbnails/Keep pink.jpg" },
+            { title: "Pink aye", url: "https://drive.google.com/file/d/1cEtSjywgDL98x1kZhXJXBGFS8xErD4-w/view?usp=sharing", thumbnail: "./thumbnails/Pink aye.jpg" },
+            { title: "A place to sleep in", url: "https://drive.google.com/file/d/1d6TS1NniMMcdfsHYPxZptuUVLuLKFs01/view?usp=sharing", thumbnail: "./thumbnails/A place to sleep in.jpg" },
+            { title: "Sherlock", url: "https://drive.google.com/file/d/1OqfwFc1lsLYLfirEKEqF3xBWipMmsMMy/view?usp=sharing", thumbnail: "./thumbnails/Sherlock.jpg" },
+            { title: "Therapy", url: "https://drive.google.com/file/d/1Jy4fZ840OcwNDj6U_J2GUdnrztHlVfbq/view?usp=sharing", thumbnail: "./thumbnails/Therapy.jpg" },
+            { title: "The elephant", url: "https://drive.google.com/file/d/1gUMWWBSC9Q4heEz5cTQavhQ0k-w9TLUn/view?usp=sharing", thumbnail: "./thumbnails/The elephant.jpg" },
+            { title: "Is it mink", url: "https://drive.google.com/file/d/1zVStSKLWW5dcMIARxrzowAoTHk4DxalL/view?usp=sharing", thumbnail: "./thumbnails/Is it mink.jpg" },
+            { title: "Plague control", url: "https://drive.google.com/file/d/1QhcpRWXGahkSQuTNByvMq7aEYU4PQeXF/view?usp=sharing", thumbnail: "./thumbnails/Plague control.jpg" },
+            { title: "To the rescue", url: "https://drive.google.com/file/d/1Muu6KD-KWrCB8ufAilL4zEwIpequsU2F/view?usp=sharing", thumbnail: "./thumbnails/To the rescue.jpg" },
+            { title: "Pink magic", url: "https://drive.google.com/file/d/1OWzRA5aEflcs-sgFnFzj19flE_kAOKS-/view?usp=sharing", thumbnail: "./thumbnails/Pink magic.jpg" },
+            { title: "Arcade", url: "https://drive.google.com/file/d/1rXhPw5_Qa4lzvH1tU-0lFnIbRLEAQTGH/view?usp=sharing", thumbnail: "./thumbnails/Arcade.jpg" },
+            { title: "A very pink christmas", url: "https://drive.google.com/file/d/19-8xcrkMI9V9lTjFa2XKnVMK-pjn5x4C/view?usp=sharing", thumbnail: "./thumbnails/A very pink christmas.jpg" },
+
+
+        ];
+
+        // { title: "XXXXXXX", url: "ZZZZZZZ", thumbnail: "./thumbnails/XXXXXXX.jpg" },
+
+        
+        
+        const videoList = document.getElementById("video-list");
+        videos.forEach(video => {
+            const videoItem = document.createElement("div");
+            videoItem.classList.add("video-item");
+            videoItem.innerHTML = `
+                <a href="${video.url}" target="_blank">
+                    <img src="${video.thumbnail}" alt="${video.title}">
+                </a>
+                <a href="${video.url}" target="_blank">${video.title}</a>
+            `;
+            videoList.appendChild(videoItem);
+        });
+    </script>
+</body>
+</html>
