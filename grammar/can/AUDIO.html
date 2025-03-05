@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Page</title>
+    <style>
+        @font-face {font-family: Poppins; src: url(../../fonts/Poppins-Medium.ttf);}
+        * {font-family: Poppins;}
+        body {background-color: #001020; color: white; margin: 0; padding: 0;}
+        nav {background-color: #00274e; width: 100%; display: flex; justify-content: space-evenly; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); padding: 15px 0;}
+        nav a {text-decoration: none; color: white; margin: 0 10px; font-size: 18px;}
+        nav a:hover {font-weight: bold; color: yellow; cursor: pointer;}
+
+        .container {display: flex; justify-content: space-between; padding: 20px;}
+        .left {text-align: center; flex: .3; align-content: center;}
+        .right {flex: .7; display: flex; flex-direction: column; align-items: center; position: relative;}
+
+        .emoji {font-size: 200px; animation: pulse 3s infinite; margin-bottom: 10px;}
+        @keyframes pulse {0%, 100% {transform: scale(1);} 50% {transform: scale(1.2);}}
+        .span-text {cursor: pointer; font-size: 20px; margin: 5px 10px; color: white;}
+        .span-text:hover {color: #ffcc00;}
+        .span-text.disabled {color: gray; cursor: not-allowed;}
+        .input-box {width: 90%; padding: 10px; margin-top: 10px; font-size: 18px; color: black; text-align: center;}
+        
+        button {background-color: #004a7c; color: white; padding: 10px 20px; margin: 10px 0; border: none; cursor: pointer; font-size: 20px; border-radius: 15px;}
+        button:hover {background-color: #006c99;}
+        #soundButton {width: 100px; margin-right: 30px; font-size: 50px;}
+        #halfSpeedButton {width: 200px; font-size: 50px}
+        #phrases {margin-top: 30px; margin-bottom: 30px; display: flex; max-width: 700px; flex-wrap: wrap; justify-content: center;}
+
+        #phrases span {margin-right: 10px;}
+        #instructions {font-size: 30px;}
+        .button-container {display: flex; justify-content: center; width: 100%; }
+        .button-container button {width: 20%; margin-right: 20px; margin-bottom: 30px;}
+        #answer-button {margin-bottom: 70px;}
+
+        #validateButton {background-color: rgb(0, 143, 0)}
+        #validateButton:hover {background-color: rgb(0, 170, 0)}
+        #validateButton:disabled {background-color: gray; cursor: not-allowed;}
+
+        #clearButton {background-color: rgb(192, 0, 0)}
+        #clearButton:hover {background-color: rgb(241, 0, 0)}
+        #score {font-size: 20px; color: yellow; margin-top: 20px;}
+
+        #progressBar {width: 50%; height: 10px; background-color: #444; margin-top: 10px; position: relative;}
+        #progressBarFilled {height: 100%; width: 0%; background-color: #00b300; border-radius: 30px;}
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="./INDEX.html">↩️ Back to Main Menu</a>
+    </nav>
+    <div class="container">
+        <div class="left">
+            <div class="emoji">🦻🏻</div>
+            <span id="instructions">Listen carefully and order the phrases</span>
+        </div>
+        <div class="right">
+            <div class="button-container">
+                <button class="sound-button" id="soundButton">🔊</button>
+                <button class="sound-button" id="halfSpeedButton">🔉🐢</button>
+                <button class="button" id="nextExercise">Next</button>
+            </div>
+
+            <input type="text" class="input-box" id="inputBox" readonly>
+
+            <div id="phrases"></div>
+
+            <div id="answer-button">
+                <button class="button" id="clearButton">Clear</button>
+                <button class="button" id="validateButton">Validate Answer</button>
+            </div>
+
+            <div id="progressBar">
+                <div id="progressBarFilled"></div>
+            </div>
+
+            <div id="score">✅ = 0 ❌ = 0</div>
+        </div>
+    </div>
+
+    <script>
+        const exercises = [
+    { sentence: "Teeth are in your mouth", phrases: ["Teeth", "are", "in", "your mouth", "clean", "brush", "strong"] },
+    { sentence: "My gums are pink", phrases: ["My gums", "are", "pink", "healthy", "red", "teeth", "mouth"] },
+    { sentence: "I use toothpaste to clean my teeth", phrases: ["I use", "toothpaste", "to clean", "my teeth", "brush", "fresh", "clean"] },
+    { sentence: "I brush my teeth every day", phrases: ["I brush", "my teeth", "every day", "clean", "toothbrush", "twice a day", "healthy"] },
+    { sentence: "You should brush your teeth in the morning", phrases: ["You should", "brush your teeth", "in the morning", "clean", "every day", "fresh breath"] },
+    { sentence: "A cavity is a hole in your tooth", phrases: ["A cavity", "is", "a hole", "in your tooth", "bad", "decay", "teeth health"] },
+    { sentence: "It’s bad to eat too much sugar because it can give you a cavity", phrases: ["It’s bad", "to eat", "too much sugar", "because", "it can", "give you", "a cavity"] },
+    { sentence: "Molars are the big teeth at the back of your mouth", phrases: ["Molars", "are", "the big teeth", "at the back", "of your mouth", "chew", "food"] },
+    { sentence: "I use floss to clean between my teeth", phrases: ["I use", "floss", "to clean", "between my teeth", "remove", "food", "clean"] },
+    { sentence: "You should brush your teeth for two minutes", phrases: ["You should", "brush your teeth", "for", "two minutes", "clean", "every day", "fresh"] },
+    { sentence: "Teeth help you chew food", phrases: ["Teeth", "help you", "chew", "food", "bite", "munch", "strong"] },
+    { sentence: "You can chew gum, but it’s better to chew healthy food", phrases: ["You can", "chew gum", "but it’s", "better", "to chew", "healthy food", "not sugar"] },
+    { sentence: "My toothbrush has soft bristles", phrases: ["My toothbrush", "has", "soft bristles", "clean", "brush", "gums", "teeth"] },
+    { sentence: "I visit the dentist to check my teeth", phrases: ["I visit", "the dentist", "to check", "my teeth", "health", "teeth check", "doctor"] },
+    { sentence: "Flossing helps remove food stuck between teeth", phrases: ["Flossing", "helps remove", "food stuck", "between teeth", "clean", "gums", "healthy"] },
+    { sentence: "My molars are strong for chewing", phrases: ["My molars", "are strong", "for", "chewing", "big", "back teeth", "munch"] },
+    { sentence: "Toothpaste makes your teeth clean and white", phrases: ["Toothpaste", "makes", "your teeth", "clean", "and white", "fresh", "brush"] },
+    { sentence: "You can get a cavity if you don’t brush your teeth", phrases: ["You can", "get a cavity", "if you", "don’t brush", "your teeth", "decay", "bad"] },
+    { sentence: "The dentist says to brush twice a day", phrases: ["The dentist", "says", "to brush", "twice a day", "clean", "healthy teeth", "important"] },
+    { sentence: "Don’t forget to floss before bed", phrases: ["Don’t forget", "to floss", "before bed", "clean", "teeth", "gums", "health"] }
+];
+
+    
+        let currentExerciseIndex = 0;
+        let correctCount = 0;
+        let incorrectCount = 0;
+    
+        const soundButton = document.getElementById("soundButton");
+        const halfSpeedButton = document.getElementById("halfSpeedButton");
+        const clearButton = document.getElementById("clearButton");
+        const validateButton = document.getElementById("validateButton");
+        const nextButton = document.getElementById("nextExercise");
+        const inputBox = document.getElementById("inputBox");
+        const phrasesContainer = document.getElementById("phrases");
+        const scoreDisplay = document.getElementById("score");
+        const progressBarFilled = document.getElementById("progressBarFilled");
+    
+        function loadExercise(index) {
+            const exercise = exercises[index];
+            inputBox.value = "";
+            const shuffledPhrases = [...exercise.phrases];
+            shuffleArray(shuffledPhrases);
+    
+            phrasesContainer.innerHTML = "";
+            shuffledPhrases.forEach((phrase) => {
+                const span = document.createElement("span");
+                span.className = "span-text";
+                span.textContent = phrase;
+                span.addEventListener("click", function() {
+                    inputBox.value += phrase + " ";
+                    span.classList.add("disabled");
+                    span.style.pointerEvents = "none";
+                });
+                phrasesContainer.appendChild(span);
+            });
+    
+            soundButton.onclick = () => {
+                playUtterance(exercise.sentence, 0.8); // Normal speed
+            };
+    
+            halfSpeedButton.onclick = () => {
+                playUtterance(exercise.sentence, 0.4); // Slower speed
+            };
+    
+            updateProgressBar();
+        }
+    
+        function playUtterance(text, rate) {
+            speechSynthesis.cancel(); // Cancel any ongoing utterances
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = "en-US"; // Always read in English
+            utterance.voice = getNaturalVoice(); // Set the voice to a more natural one
+            utterance.rate = rate; // Set the speaking rate
+            speechSynthesis.speak(utterance);
+        }
+    
+        function getNaturalVoice() {
+            const voices = speechSynthesis.getVoices();
+            // Try to find a natural-sounding English voice, otherwise default
+            return voices.find(voice => voice.lang === 'en-US' && voice.name.includes('Google')) || voices[0];
+        }
+    
+        function updateProgressBar() {
+            const progress = ((currentExerciseIndex + 1) / exercises.length) * 100;
+            progressBarFilled.style.width = `${progress}%`;
+        }
+    
+        clearButton.addEventListener("click", function() {
+            inputBox.value = "";
+            const disabledSpans = document.querySelectorAll('.span-text.disabled');
+            disabledSpans.forEach(span => {
+                span.classList.remove('disabled');
+                span.style.pointerEvents = 'auto';
+            });
+            new Audio('../sounds/SFX pop.mp3').play();
+        });
+    
+        validateButton.addEventListener("click", function() {
+            const exercise = exercises[currentExerciseIndex];
+            if (inputBox.value.trim() === exercise.sentence) {
+                inputBox.style.backgroundColor = "lightgreen";
+                correctCount++;
+                new Audio('../sounds/SFX correct answer 11.wav').play();
+            } else {
+                inputBox.style.backgroundColor = "salmon";
+                incorrectCount++;
+                new Audio('../sounds/SFX wrong answer 4.wav').play();
+            }
+            scoreDisplay.textContent = `✅ = ${correctCount} ❌ = ${incorrectCount}`;
+            validateButton.disabled = true; // Disable validate button after click
+        });
+    
+        nextButton.addEventListener("click", function() {
+            if (currentExerciseIndex === exercises.length - 2) {
+                nextButton.disabled = true;
+                nextButton.style.backgroundColor = 'gray';
+            }
+    
+            if (currentExerciseIndex < exercises.length - 1) {
+                currentExerciseIndex++;
+                loadExercise(currentExerciseIndex);
+            }
+    
+            inputBox.style.backgroundColor = "white";
+            new Audio('../sounds/SFX click.wav').play();
+            validateButton.disabled = false; // Enable validate button when next is clicked
+        });
+    
+        loadExercise(currentExerciseIndex);
+    
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Page</title>
+    <style>
+        @font-face {font-family: Poppins; src: url(../../fonts/Poppins-Medium.ttf);}
+        * {font-family: Poppins;}
+        body {background-color: #001020; color: white; margin: 0; padding: 0;}
+        nav {background-color: #00274e; width: 100%; display: flex; justify-content: space-evenly; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); padding: 15px 0;}
+        nav a {text-decoration: none; color: white; margin: 0 10px; font-size: 18px;}
+        nav a:hover {font-weight: bold; color: yellow; cursor: pointer;}
+
+        .container {display: flex; justify-content: space-between; padding: 20px;}
+        .left {text-align: center; flex: .3; align-content: center;}
+        .right {flex: .7; display: flex; flex-direction: column; align-items: center; position: relative;}
+
+        .emoji {font-size: 200px; animation: pulse 3s infinite; margin-bottom: 10px;}
+        @keyframes pulse {0%, 100% {transform: scale(1);} 50% {transform: scale(1.2);}}
+        .span-text {cursor: pointer; font-size: 20px; margin: 5px 10px; color: white;}
+        .span-text:hover {color: #ffcc00;}
+        .span-text.disabled {color: gray; cursor: not-allowed;}
+        .input-box {width: 90%; padding: 10px; margin-top: 10px; font-size: 18px; color: black; text-align: center;}
+        
+        button {background-color: #004a7c; color: white; padding: 10px 20px; margin: 10px 0; border: none; cursor: pointer; font-size: 20px; border-radius: 15px;}
+        button:hover {background-color: #006c99;}
+        #soundButton {width: 100px; margin-right: 30px; font-size: 50px;}
+        #halfSpeedButton {width: 200px; font-size: 50px}
+        #phrases {margin-top: 30px; margin-bottom: 30px; display: flex; max-width: 700px; flex-wrap: wrap; justify-content: center;}
+
+        #phrases span {margin-right: 10px;}
+        #instructions {font-size: 30px;}
+        .button-container {display: flex; justify-content: center; width: 100%; }
+        .button-container button {width: 20%; margin-right: 20px; margin-bottom: 30px;}
+        #answer-button {margin-bottom: 70px;}
+
+        #validateButton {background-color: rgb(0, 143, 0)}
+        #validateButton:hover {background-color: rgb(0, 170, 0)}
+        #validateButton:disabled {background-color: gray; cursor: not-allowed;}
+
+        #clearButton {background-color: rgb(192, 0, 0)}
+        #clearButton:hover {background-color: rgb(241, 0, 0)}
+        #score {font-size: 20px; color: yellow; margin-top: 20px;}
+
+        #progressBar {width: 50%; height: 10px; background-color: #444; margin-top: 10px; position: relative;}
+        #progressBarFilled {height: 100%; width: 0%; background-color: #00b300; border-radius: 30px;}
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="./INDEX.html">↩️ Back to Main Menu</a>
+    </nav>
+    <div class="container">
+        <div class="left">
+            <div class="emoji">🦻🏻</div>
+            <span id="instructions">Listen carefully and order the phrases</span>
+        </div>
+        <div class="right">
+            <div class="button-container">
+                <button class="sound-button" id="soundButton">🔊</button>
+                <button class="sound-button" id="halfSpeedButton">🔉🐢</button>
+                <button class="button" id="nextExercise">Next</button>
+            </div>
+
+            <input type="text" class="input-box" id="inputBox" readonly>
+
+            <div id="phrases"></div>
+
+            <div id="answer-button">
+                <button class="button" id="clearButton">Clear</button>
+                <button class="button" id="validateButton">Validate Answer</button>
+            </div>
+
+            <div id="progressBar">
+                <div id="progressBarFilled"></div>
+            </div>
+
+            <div id="score">✅ = 0 ❌ = 0</div>
+        </div>
+    </div>
+
+    <script>
+        const exercises = [
+            { sentence: "You must brush your teeth every day", phrases: ["You must", "brush your teeth", "every day", "clean", "healthy", "important"] },
+            { sentence: "You must not eat too much candy", phrases: ["You must not", "eat", "too much candy", "bad for teeth", "sugar", "decay"] },
+            { sentence: "Must I wash my hands before eating?", phrases: ["Must I", "wash my hands", "before", "eating?", "clean", "important", "healthy"] },
+            { sentence: "She must finish her homework", phrases: ["She must", "finish", "her homework", "important", "study", "school"] },
+            { sentence: "He must not stay up too late", phrases: ["He must not", "stay up", "too late", "rest", "sleep", "healthy"] },
+            { sentence: "Must we wear uniforms at school?", phrases: ["Must we", "wear uniforms", "at school?", "dress code", "important", "rules"] },
+            { sentence: "They must help clean the house", phrases: ["They must", "help", "clean", "the house", "chores", "responsible"] },
+            { sentence: "I must drink water every day", phrases: ["I must", "drink", "water", "every day", "healthy", "important"] },
+            { sentence: "You must not talk during the test", phrases: ["You must not", "talk", "during", "the test", "quiet", "focus"] },
+            { sentence: "Must you wear a helmet when riding a bike?", phrases: ["Must you", "wear", "a helmet", "when", "riding", "a bike?", "safety"] }
+        ];
+    
+        let currentExerciseIndex = 0;
+        let correctCount = 0;
+        let incorrectCount = 0;
+    
+        const soundButton = document.getElementById("soundButton");
+        const halfSpeedButton = document.getElementById("halfSpeedButton");
+        const clearButton = document.getElementById("clearButton");
+        const validateButton = document.getElementById("validateButton");
+        const nextButton = document.getElementById("nextExercise");
+        const inputBox = document.getElementById("inputBox");
+        const phrasesContainer = document.getElementById("phrases");
+        const scoreDisplay = document.getElementById("score");
+        const progressBarFilled = document.getElementById("progressBarFilled");
+    
+        let voices = [];
+    
+        function loadVoices() {
+            voices = speechSynthesis.getVoices();
+            if (voices.length === 0) {
+                setTimeout(loadVoices, 100); // Retry if voices are not loaded yet
+            }
+        }
+    
+        function getNaturalVoice() {
+            if (voices.length === 0) {
+                loadVoices();
+            }
+            return voices.find(voice => voice.lang === 'en-US' && voice.name.includes('Google')) || voices[0];
+        }
+    
+        speechSynthesis.onvoiceschanged = loadVoices; // Load voices when available
+    
+        function loadExercise(index) {
+            const exercise = exercises[index];
+            inputBox.value = "";
+            const shuffledPhrases = [...exercise.phrases];
+            shuffleArray(shuffledPhrases);
+    
+            phrasesContainer.innerHTML = "";
+            shuffledPhrases.forEach((phrase) => {
+                const span = document.createElement("span");
+                span.className = "span-text";
+                span.textContent = phrase;
+                span.addEventListener("click", function() {
+                    inputBox.value += phrase + " ";
+                    span.classList.add("disabled");
+                    span.style.pointerEvents = "none";
+                });
+                phrasesContainer.appendChild(span);
+            });
+    
+            soundButton.onclick = () => {
+                playUtterance(exercise.sentence, 0.8); // Normal speed
+            };
+    
+            halfSpeedButton.onclick = () => {
+                playUtterance(exercise.sentence, 0.4); // Slower speed
+            };
+    
+            updateProgressBar();
+        }
+    
+        function playUtterance(text, rate) {
+            speechSynthesis.cancel(); // Cancel any ongoing utterances
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = "en-US"; // Always read in English
+            utterance.voice = getNaturalVoice(); // Set the voice to a more natural one
+            utterance.rate = rate; // Set the speaking rate
+            speechSynthesis.speak(utterance);
+        }
+    
+        function updateProgressBar() {
+            const progress = ((currentExerciseIndex + 1) / exercises.length) * 100;
+            progressBarFilled.style.width = `${progress}%`;
+        }
+    
+        clearButton.addEventListener("click", function() {
+            inputBox.value = "";
+            const disabledSpans = document.querySelectorAll('.span-text.disabled');
+            disabledSpans.forEach(span => {
+                span.classList.remove('disabled');
+                span.style.pointerEvents = 'auto';
+            });
+            new Audio('../sounds/SFX pop.mp3').play();
+        });
+    
+        validateButton.addEventListener("click", function() {
+            const exercise = exercises[currentExerciseIndex];
+            if (inputBox.value.trim() === exercise.sentence) {
+                inputBox.style.backgroundColor = "lightgreen";
+                correctCount++;
+                new Audio('../../sounds/SFX correct answer 11.wav').play();
+            } else {
+                inputBox.style.backgroundColor = "salmon";
+                incorrectCount++;
+                new Audio('../../sounds/SFX wrong answer 4.wav').play();
+            }
+            scoreDisplay.textContent = `✅ = ${correctCount} ❌ = ${incorrectCount}`;
+            validateButton.disabled = true; // Disable validate button after click
+        });
+    
+        nextButton.addEventListener("click", function() {
+            if (currentExerciseIndex === exercises.length - 2) {
+                nextButton.disabled = true;
+                nextButton.style.backgroundColor = 'gray';
+            }
+    
+            if (currentExerciseIndex < exercises.length - 1) {
+                currentExerciseIndex++;
+                loadExercise(currentExerciseIndex);
+            }
+    
+            inputBox.style.backgroundColor = "white";
+            new Audio('../sounds/SFX click.wav').play();
+            validateButton.disabled = false; // Enable validate button when next is clicked
+        });
+    
+        loadExercise(currentExerciseIndex);
+    
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+    </script>
+    
+    
+</body>
+</html>

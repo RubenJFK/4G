@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        @font-face {font-family: Poppins; src: url(../styles/fonts/Poppins-Medium.ttf);}
+        * {font-family: Poppins;}
+        /* @font-face {font-family: LemonSoda; src: url(../../fonts/lemonsoda.otf);}
+        * {font-family: LemonSoda;} */
+        body {background-color: #f5f5f5; margin:0px;}
+        #superior {background-color: #0056b3; display: flex; justify-content:space-around; padding: 10px 0;}
+        #superior a {text-decoration: none; color: white; margin: 0 10px; font-size: 20px;}
+        #superior a:hover {color: yellow; font-weight: bold;}
+        section {margin: 40px; padding: 20px; background-color: white; border-radius:10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);}
+        .emoji {font-size: 200px; margin-left: 100px;}
+        .section {text-align: center; font-size: 20px; display: flex; justify-content: center; margin-top: 30px; align-items: center;}
+        #interior {display: flex; justify-content:space-around;}
+        button {padding: 10px; font-size: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);}
+    </style>
+</head>
+<body>
+<nav id="superior">
+    <a href="./INDEX.html">🔄️ Back to Main Menu</a>
+    <!-- <a href="./can-affirmative1.html">➡️ Skip to Exercises</a> -->
+</nav>
+<section>
+    <div>
+        <nav id="interior">
+            <button id="prevButton">⏪ Previous Explanation</button>
+            <button id="nextButton">⏩ Next Explanation</button>
+
+        </nav>
+        <div>
+            <div class="section" id="caja1">
+                <div class="explanation">
+                    <h2>조동사 'Can'</h2>
+                    <p>✔️ <b>능력</b>이나 어떤 일을 할 수 있는 <b>가능성</b>을 표현할 때 사용됩니다.</p>
+                    <p>✔️ <b>허락</b>을 요청할 때 사용됩니다.</p>
+                    <p>✔️ 어떤 일을 할 <b>기회</b>를 나타낼 때 사용됩니다.</p>
+
+                </div>
+                <div class="emoji">📖</div>
+            </div>
+
+            <div class="section" id="caja2" style="display: none;">
+                <div class="explanation">
+                    
+                    <h2>1. 능력</h2>
+                    <p>어떤 일을 할 수 있는 능력이나 가능성을 표현할 때 사용됩니다.</p>
+                    <p><strong>예시:</strong></p>
+
+                    <p>I <strong>can</strong> swim. (나는 <strong>수영할 수</strong> 있어요.)</p>
+                    <p>She can play the piano. (그녀는 피아노를 칠 수 있어요.)</p>
+                    <p>He can run very fast. (그는 매우 빨리 달릴 수 있어요.)</p>
+                    <p>I can't drink milk. (나는 우유를 마실 수 없어요.)</p>
+                    <p>They can paint. (그들은 그림을 그릴 수 있어요.)</p>
+
+                </div>
+                <div class="emoji">💪</div>
+            </div>
+
+            <div class="section" id="caja3" style="display: none;">
+                <div class="explanation">
+
+                    <h2>2. 허락</h2>
+                    <p>허락을 요청하거나 허락을 줄 때 사용됩니다.</p>
+                    <p><strong>예시:</strong> Can I go to the bathroom? (화장실에 가도 될까요?)</p>
+                    <p>Can I borrow your book? (당신의 책을 빌려도 될까요?)</p>
+                    <p>Can we sit here? (여기에 앉아도 될까요?)</p>
+                    <p>You can use my phone if you need it. (필요하다면 내 휴대폰을 사용해도 돼요.)</p>
+                    <p>Can he leave early today? (그가 오늘 일찍 떠나도 될까요?)</p>
+
+                </div>
+                <div class="emoji">✅</div>
+            </div>
+            
+            <div class="section" id="caja4" style="display: none;">
+                <div class="explanation">
+                    <h2>3. 기회</h2>
+                    <p>어떤 일을 할 수 있는 기회를 나타낼 때 사용됩니다.</p>
+                    <p><strong>예시:</strong> You <strong>can</strong> visit the museum this weekend. (이번 주말에 박물관을 방문할 수 있어요.)</p>
+                    <p>You <strong>can</strong> join the soccer club if you want. (원한다면 축구 동아리에 가입할 수 있어요.)</p>
+                    <p>They <strong>can</strong> watch the fireworks tonight. (그들은 오늘 밤에 불꽃놀이를 볼 수 있어요.)</p>
+                    <p>We <strong>can</strong> take the train to the city tomorrow. (우리는 내일 기차를 타고 도시로 갈 수 있어요.)</p>
+                    <p>He <strong>can</strong> attend the concert next month. (그는 다음 달에 콘서트에 참석할 수 있어요.)</p>
+
+
+                </div>
+                <div class="emoji">🌟</div>
+            </div>
+            
+        </div>
+    </div>
+</section>
+<script>
+    const nextButton = document.getElementById('nextButton');
+    const prevButton = document.getElementById('prevButton');
+    const sections = document.querySelectorAll('.section');
+    let currentSection = 0;
+
+    nextButton.addEventListener('click', () => {
+        if (currentSection < sections.length - 1) {
+            sections[currentSection].style.display = 'none';
+            currentSection++;
+            sections[currentSection].style.display = 'flex';
+        }
+    });
+
+    prevButton.addEventListener('click', () => {
+        if (currentSection > 0) {
+            sections[currentSection].style.display = 'none';
+            currentSection--;
+            sections[currentSection].style.display = 'flex';
+        }
+    });
+</script>
+</body>
+</html>

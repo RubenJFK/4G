@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EXERCISE</title>
+    <style>
+        @font-face {font-family: LemonSoda; src: url(../../fonts/lemonsoda.otf);}
+        * {font-family: LemonSoda; box-sizing: border-box;}
+        body { background-color: #001020; color: white; margin: 0; font-size: 1.2em; display: flex; height: 100vh; }
+        nav { background-color: #00274e; padding: 15px; text-align: center; width: 100%; position: fixed; top: 0; left: 0; z-index: 1000; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); }
+        nav a { color: white; text-decoration: none; padding: 10px 20px; margin: 0 10px; }
+        nav a:hover { font-weight: bold; color: yellow; cursor: pointer; }
+        section { margin: 50px; display: flex; width: 100%; height: calc(100vh - 80px); }
+        .left-side { width: 30%; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .right-side { width: 70%; text-align: center; display: flex; justify-content: center; align-items: center; flex-direction: column; }
+        .emoji { font-size: 12em; margin-bottom: 20px; }
+        .instructions { font-size: 1.5em; }
+        .grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 25px; max-width: 800px; margin: auto; }
+        .word { padding: 10px; background-color: #68a0df; color: black; text-align: center; border-radius: 5px; transition: background-color 0.2s; cursor: pointer; }
+        .highlight-start { background-color: #f7d73b !important; }
+        .highlight-middle { background-color: #46dc46 !important; }
+        .highlight-end { background-color: #ec8b2a !important; }
+        button { margin-top: 30px; padding: 10px 50px; font-size: 1em; cursor: pointer; border: none; border-radius: 5px; background-color: #004080; color: white; }
+        button:hover { background-color: #0056b3; }
+        .finished-message { margin-top: 20px; font-size: 1.5em; color: rgb(0, 242, 255); font-weight: bold; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="./INDEX.html">↩️ Back to Main menu</a>
+    </nav>
+    <section>
+        <div class="left-side">
+            <div class="emoji">👆🏻</div>
+            <div class="instructions">Click the words as you see them</div>
+        </div>
+        <div class="right-side">
+            <button onclick="startExercise()">Start</button>
+            <div class="grid" id="wordGrid"></div>
+            <div id="finishedMessage" class="finished-message" style="display: none;">You have finished the exercise!</div>
+        </div>
+    </section>
+    <script>
+        const sentences = [
+            "You must do your homework", 
+            "He must eat vegetables", 
+            "She must clean her room",
+            "We must be quiet", 
+            "They must wear a uniform", 
+            "You must not touch that",
+            "He must not run here", 
+            "She must not be late", 
+            "Must I help you?", 
+            "Must we go now?"
+        ];
+        let wordElements = [], currentSentenceIndex = 0, currentWordIndex = 0;
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function createGrid() {
+            let grid = document.getElementById("wordGrid");
+            grid.innerHTML = "";
+            wordElements = [];
+            let allWords = [];
+            sentences.forEach((sentence, sIndex) => {
+                let words = sentence.split(" ").map((word, wIndex) => ({ text: word, sentenceIndex: sIndex, wordIndex: wIndex }));
+                wordElements.push(words); // Keep original order
+                allWords.push(...words);
+            });
+            shuffleArray(allWords);
+            allWords.forEach(wordObj => {
+                let span = document.createElement("div");
+                span.className = "word";
+                span.innerText = wordObj.text;
+                grid.appendChild(span);
+                wordObj.element = span;
+
+                // Add event listener for clicking
+                span.addEventListener("click", () => onWordClick(wordObj));
+            });
+        }
+
+        function onWordClick(wordObj) {
+            // Play the sound
+            let audio = new Audio("../../sounds/SFX select 6.wav");
+            audio.play();
+
+            // Reset background color for all words
+            document.querySelectorAll(".word").forEach(el => el.className = "word");
+            
+            let sentenceWords = wordElements[wordObj.sentenceIndex];
+
+            // Move to the next sentence if the current sentence is finished
+            if (wordObj.wordIndex >= sentenceWords.length - 1) {
+                currentSentenceIndex++; // Move to the next sentence
+                currentWordIndex = 0; // Reset word index for the new sentence
+
+                if (currentSentenceIndex >= sentences.length) {
+                    showFinishedMessage();
+                    return; // Stop further actions when all sentences are completed
+                }
+                setTimeout(() => {
+                    highlightNextWord(); // Start highlighting the next sentence
+                }, 300); // Small delay before the next sentence starts
+            } else {
+                currentWordIndex = wordObj.wordIndex + 1;
+                highlightNextWord();
+            }
+        }
+
+        function highlightNextWord() {
+            let sentenceWords = wordElements[currentSentenceIndex];
+            let currentWord = sentenceWords[currentWordIndex];
+            currentWord.element.classList.add(
+                currentWord.wordIndex === 0 ? "highlight-start" :
+                currentWord.wordIndex === sentenceWords.length - 1 ? "highlight-end" :
+                "highlight-middle"
+            );
+        }
+
+        function startExercise() {
+            resetExercise();
+            currentSentenceIndex = 0;
+            currentWordIndex = 0;
+            let audio = new Audio("../../sounds/SFX race countdown.wav");
+            audio.play();
+            setTimeout(() => {
+                highlightNextWord(); // Start the first word after 4 seconds
+            }, 4000); // Start after 4 seconds delay
+        }
+
+        function resetExercise() {
+            document.querySelectorAll(".word").forEach(el => el.className = "word");
+            document.getElementById("finishedMessage").style.display = "none";
+            currentSentenceIndex = 0;
+            currentWordIndex = 0;
+        }
+
+        function showFinishedMessage() {
+            // Play the "finished" sound
+            let audio = new Audio("../../sounds/SFX notice 2.wav");
+            audio.play();
+            
+            // Display the finished message
+            document.getElementById("finishedMessage").style.display = "block";
+        }
+
+        createGrid();
+    </script>
+</body>
+</html>

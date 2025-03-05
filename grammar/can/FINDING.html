@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EXERCISE</title>
+    <style>
+        @font-face {font-family: LemonSoda; src: url(../../fonts/lemonsoda.otf);}
+        * {font-family: LemonSoda;}
+        body {background-color: #001020; color: white; margin: 0; font-size: 1em; display: flex; flex-direction: column; height: 100vh;}
+        nav {background-color: #00274e; padding: 15px; text-align: center; width: 100%; position: fixed; top: 0; left: 0; z-index: 1000; font-size: 1rem; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);}
+        nav a {color: white; text-decoration: none; padding: 10px 20px; margin: 0 10px;}
+        nav a:hover {font-weight: bold; color: yellow; cursor: pointer;}
+        section {margin: 100px 30px 30px 30px; display: flex;}
+        .left-side {flex: .2; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-right: 50px;}
+        .right-side {flex: .8; display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-between;}
+        .emoji {font-size: 15em;}
+        .instructions {font-size: 1.2em; text-align: center; margin-top: 10px;}
+        .score {font-size: 1.2em; margin-top: 10px; color: yellow;}
+        .sentence { background-color: #003c6f; padding: 13px; cursor: pointer; border-radius: 5px; width: 25%; text-align: center; font-size: 0.9em; }
+        .correct-guess {background-color: #197419;}
+        .wrong-guess {background-color: #ff6347;}
+        .sentence:hover {font-weight: bold;}
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="./INDEX.html">↩️ Back to Main menu</a>
+    </nav>
+    <section>
+        <div class="left-side">
+            <div class="emoji">🕵🏻</div>
+            <div class="instructions">🖱️ Click only on the <span style="color: yellow">CORRECT</span> sentences.</div>
+            <div class="score" id="score">🏆 Your score is 0 out of 8</div>
+        </div>
+        <div class="right-side" id="sentences-container"></div>
+    </section>
+    <script>
+        const sentences = [
+            {text: 'She can swim well.', correct: true},
+            {text: 'They can play basketball.', correct: true},
+            {text: 'Mina can write a letter.', correct: true},
+            {text: 'We can eat lunch together.', correct: true},
+            {text: 'He can to run very fast.', correct: false},
+            {text: 'I can speaks English.', correct: false},
+            {text: 'She can cooking dinner.', correct: false},
+            {text: 'We can eat dinner later.', correct: true},
+            {text: 'They can to play outside.', correct: false},
+            {text: 'He can’t ride a bike.', correct: true},
+            {text: 'Jiwon cannot climb the tree.', correct: true},
+            {text: 'Mina can’t to draw a cat.', correct: false},
+            {text: 'We cannot playing now.', correct: false},
+            {text: 'Can you help me?', correct: true},
+            {text: 'Can Heegang open the door?', correct: true},
+            {text: 'Can Kodai jump high?', correct: true},
+            {text: 'Can he to swim?', correct: false},
+            {text: 'Can she sings a song?', correct: false},
+            {text: 'Can they playing football?', correct: false},
+            {text: 'Can Jiwon to read this book?', correct: false}
+        ];
+
+        // Fisher-Yates shuffle function to randomize array order
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        shuffleArray(sentences);
+
+        let score = 0;
+        const maxScore = sentences.filter(s => s.correct).length;
+        const scoreDisplay = document.getElementById('score');
+        scoreDisplay.textContent = `🏆 Your score is 0 out of ${maxScore}`;
+
+        const container = document.getElementById('sentences-container');
+        sentences.forEach(sentence => {
+            const sentenceElement = document.createElement('div');
+            sentenceElement.classList.add('sentence');
+            sentenceElement.textContent = sentence.text;
+            sentenceElement.setAttribute('data-correct', sentence.correct);
+            
+            sentenceElement.addEventListener('click', function() {
+                if (sentenceElement.classList.contains('correct-guess') || sentenceElement.classList.contains('wrong-guess')) {
+                    return;
+                }
+                
+                if (sentence.correct) {
+                    sentenceElement.classList.add('correct-guess');
+                    let correctSound = new Audio('../../sounds/SFX select 4.wav');
+                    correctSound.play();
+                    score++;
+                } else {
+                    sentenceElement.classList.add('wrong-guess');
+                    let wrongSound = new Audio('../../sounds/SFX wrong answer 9.mp3');
+                    wrongSound.play();
+                    score--;
+                }
+                scoreDisplay.textContent = `🏆 Your score is ${score} out of ${maxScore}`;
+            });
+            
+            container.appendChild(sentenceElement);
+        });
+    </script>
+</body>
+</html>

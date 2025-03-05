@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>True or False</title>
+  <style>
+    @font-face {font-family: Poppins; src: url(../fonts/Poppins-Medium.ttf);}
+    body {font-family: Poppins; background-color: #001020; margin: 0; color: white; display: flex; flex-direction: column; height: 100vh;}
+    .navbar {background-color: #001f3f; width: 100%; padding: 15px; text-align: center; position: fixed; top: 0; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);}
+    .navbar a {color: white; text-decoration: none; font-size: 1.2em;}
+    .navbar a:hover {font-weight: bold; color: #ffcc00; cursor: pointer;}
+    .main-content {display: flex; flex: 1; margin-top: 70px; width: 100%; height: calc(100vh - 70px);}
+    .left-container {width: 80%; display: flex; justify-content: center; align-items: center;}
+    .container {text-align: center; width: 90%; background-color: #001b37; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);}
+    .right-container {width: 20%; display: flex; flex-direction: column;justify-content: center; align-items: center; background-color: #002040;}
+    #info {text-align: center;}
+    .thinking-emoji {font-size: 180px;}
+    .emoji {font-size: 100px; margin-bottom: 20px;}
+    .phrase {font-size: 1.5em; margin-bottom: 30px;}
+    .option-btn {font-size: 1.2em; padding: 10px 20px; background-color: #4caf50; color: white; border: none; border-radius: 5px; cursor: pointer; margin: 10px; width: 45%;}
+    #false-button {background-color: #f44336;}
+    #false-button:hover {background-color: #d93930;}
+    .option-btn:hover {background-color: #45a045;}
+    .message {margin-top: 20px; font-size: 1.2em; display: none;}
+    .score {font-size: 1.5em; margin-top: 20px; color: #FFD700;}
+    h2 {margin-bottom: 60px; font-size: 30px;}
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <a href="./INDEX.html">↩️ Back to Main Menu</a>
+  </div>
+
+  <div class="main-content">
+    <div class="left-container">
+      <div class="container">
+        <h2>Are these sentences TRUE? </h2>
+        <div class="emoji" id="emoji">🚶‍♂️ 🌳</div>
+        <div class="phrase" id="phrase">Walking through the park instead of driving is beneficial for the environment.</div>
+        
+        <button class="option-btn" onclick="checkAnswer(true)">Yes</button>
+        <button class="option-btn" id="false-button" onclick="checkAnswer(false)">No</button>
+
+        <div class="message" id="message"></div>
+        <div class="score" id="score" style="display: none;"></div>
+      </div>
+    </div>
+    <div class="right-container">
+      <span id="info">
+        <h1> </h1>
+
+      </span>
+
+      <div class="thinking-emoji">🤔</div>
+    </div>
+  </div>
+
+  <audio id="correct-sound" src="../sounds/SFX correct answer 4.wav"></audio>
+  <audio id="wrong-sound" src="../sounds/SFX wrong answer 4.wav"></audio>
+  <audio id="end-sound" src="../sounds/SFX correct answer 9.wav"></audio>
+
+  <script>
+    const items = [ 
+  { emojis: "🐘 🐁", phrase: "Elephants are big.", correct: true },
+  { emojis: "☀️ 🧊", phrase: "The sun is cold.", correct: false },
+];
+
+
+
+
+
+    let currentIndex = 0;
+    let score = 0;
+
+    function showNextItem() {
+      if (currentIndex < items.length) {
+        document.getElementById('emoji').textContent = items[currentIndex].emojis;
+        document.getElementById('phrase').textContent = items[currentIndex].phrase;
+        document.getElementById('message').style.display = 'none';
+      } else {
+        document.getElementById('message').textContent = 'You have completed all items!';
+        document.getElementById('message').style.display = 'block';
+        document.getElementById('score').textContent = `🏆 Your score: ${score} / ${items.length}`;
+        document.getElementById('score').style.display = 'block';
+        document.querySelectorAll('.option-btn').forEach(button => button.style.display = 'none');
+        document.getElementById('end-sound').play();
+      }
+    }
+
+    function checkAnswer(userAnswer) {
+      const correctAnswer = items[currentIndex].correct;
+
+      if (userAnswer === correctAnswer) {
+        document.getElementById('message').textContent = "Correct!";
+        document.getElementById('correct-sound').play();
+        score++;
+      } else {
+        document.getElementById('message').textContent = "Wrong!";
+        document.getElementById('wrong-sound').play();
+      }
+
+      document.getElementById('message').style.display = 'block';
+      currentIndex++;
+      setTimeout(showNextItem, 1000);
+    }
+
+    showNextItem();
+  </script>
+
+</body>
+</html>

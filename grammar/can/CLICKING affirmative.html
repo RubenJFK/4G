@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise</title>
+    <style>
+        @font-face {font-family: LemonSoda; src: url(../../fonts/lemonsoda.otf);}
+        * {font-family: LemonSoda;}
+        body {margin: 0; padding: 0; background-color: #001020; color: white; font-family: "Poppins", sans-serif; font-weight: 400;}
+        nav {background-color: #003366; display: flex; justify-content: center; padding: 10px;}
+        nav a {text-decoration: none; color: white; margin: 0 10px;}
+        nav a:hover {color: #ffcc00;}
+        .exercise-container {max-width: 800px; margin: 30px auto; padding: 10px; display: flex; justify-content: center; align-items: center;}
+
+        .new-container {display: flex; align-items: center; justify-content: center; padding: 10px; border-radius: 20px; font-size: 1.5rem; max-width: 80%; width: auto; margin: auto; height: 300px; margin-bottom: 20px;}
+        .emoji {font-size: 200px; margin-right: 70px;}
+
+        .question-container {flex-grow: 1;}
+        .question-container span {cursor: pointer;}
+        input {width: 400px; margin: 20px 10px 20px 0px; padding: 10px; border: 1px solid #444444; border-radius: 5px; font-size: 1.5rem;}
+        input.correct {background-color: #8ad88d; }
+        input.incorrect {background-color: #f08e85;}
+        button {padding: 10px 20px; margin-left: 5px; cursor: pointer; border-radius: 20px; background-color: #0056b3; color: white; font-size: 1.2rem;}
+        
+        button:hover {background-color: #003366;}
+        .korean-translation {color: #72b0f3; margin-bottom: 10px; font-size: 1em; margin-top: 30px;}
+        .japanese-translation {color: #76d6d6; margin-bottom: 30px; font-size: 1em;}
+        
+        .clicked {color: #4CAF50;}
+        .reversed {color: white;}
+        span {margin-right: 10px; margin-left: 5px}
+
+        .score {text-align: center; font-size: 1.9em; color: #f6e270;}
+
+        .navigation-buttons {text-align: center; margin-top: 20px;}
+        button:disabled {background-color: #333333; cursor: not-allowed;}
+        #prevButton, #nextButton {font-size: 20px; padding: 10px; width: 200px;}
+        #prevButton {margin-right: 25px;}
+        #resetButton {margin-right: 15px; background-color: #ee645a;}
+        
+        .controls {display: flex; align-items: center; margin-left: 10px;}
+    </style>
+</head>
+<body>
+    
+    <nav>
+        <a href="./INDEX.html">⬅️ Back to main menu</a>
+    </nav>
+    <section class="exercise-container">
+        <div id="exercise-content"></div>
+    </section>
+    <div class="score">
+        🏆 Your score: <span id="score">0</span> out of <span id="total">0</span>
+    </div>
+    <div class="navigation-buttons">
+        <button id="prevButton" onclick="navigateExercises(-1)" disabled>Previous</button>
+        <button id="nextButton" onclick="navigateExercises(1)">Next</button>
+    </div>
+
+    <script>
+        let score = 0;
+        let currentExerciseIndex = 0;
+        const totalExercises = 10;
+
+        const audioWordClick = new Audio('../../sounds/SFX results 6.wav');
+        const audioReset = new Audio('../../sounds/SFX results 3.wav');
+        const audioCorrect = new Audio('../../sounds/SFX marking 3.wav');
+        const audioWrong = new Audio('../../sounds/SFX results 5.wav');
+
+        const exercises = [
+            { emoji: "🫕", prompts: ["She", "can", "cook", "dinner"], correct: "She can cook dinner", koreanTranslation: "그녀는 저녁을 요리할 수 있어요.", japaneseTranslation: "彼女は夕食を料理することができます。" },
+            { emoji: "🍻", prompts: ["They", "can", "drink", "beer"], correct: "They can drink beer", koreanTranslation: "그들은 맥주를 마실 수 있어요.", japaneseTranslation: "彼らはビールを飲むことができます。" },
+            { emoji: "📚", prompts: ["He", "can", "read", "the book"], correct: "He can read the book", koreanTranslation: "그는 책을 읽을 수 있어요.", japaneseTranslation: "彼は本を読むことができます。" },
+            { emoji: "🏃‍♂️", prompts: ["They", "can", "run", "in the park"], correct: "They can run in the park", koreanTranslation: "그들은 공원에서 뛸 수 있어요.", japaneseTranslation: "彼らは公園で走ることができます。" },
+            { emoji: "🛏️", prompts: ["She", "can", "sleep", "in the bed"], correct: "She can sleep in the bed", koreanTranslation: "그녀는 침대에서 잘 수 있어요.", japaneseTranslation: "彼女はベッドで寝ることができます。" },
+            { emoji: "🖋️", prompts: ["He", "can", "write", "the letter"], correct: "He can write the letter", koreanTranslation: "그는 편지를 쓸 수 있어요.", japaneseTranslation: "彼は手紙を書くことができます。" },
+            { emoji: "🚗", prompts: ["She", "can", "drive", "the car"], correct: "She can drive the car", koreanTranslation: "그녀는 차를 운전할 수 있어요.", japaneseTranslation: "彼女は車を運転することができます。" },
+            { emoji: "🎧", prompts: ["They", "can", "listen", "to music"], correct: "They can listen to music", koreanTranslation: "그들은 음악을 들을 수 있어요.", japaneseTranslation: "彼らは音楽を聞くことができます。" },
+            { emoji: "🍲", prompts: ["He", "can", "cook", "lunch"], correct: "He can cook lunch", koreanTranslation: "그는 점심을 요리할 수 있어요.", japaneseTranslation: "彼は昼食を料理することができます。" },
+            { emoji: "✈️", prompts: ["She", "can", "fly", "to New York"], correct: "She can fly to New York", koreanTranslation: "그녀는 뉴욕으로 비행할 수 있어요.", japaneseTranslation: "彼女はニューヨークに飛ぶことができます。" },
+        ];
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+            }
+        }
+
+        function createExercise(index, emoji, prompts, correct, koreanTranslation, japaneseTranslation) {
+            shuffleArray(prompts);
+
+            const question = document.createElement('div');
+            question.className = 'question';
+
+            const container = document.createElement('section');
+            container.className = 'new-container';
+
+            const emojiDiv = document.createElement('div');
+            emojiDiv.innerHTML = `<span class="emoji">${emoji}</span>`;
+
+            const questionContainer = document.createElement('div');
+            questionContainer.className = 'question-container';
+
+            const sentence = document.createElement('div');
+            sentence.innerHTML = prompts.map(word => `<span onclick="addWordToInput(${index}, '${word}', this)">${word}</span>/`).join(''); 
+            sentence.innerHTML = sentence.innerHTML.slice(0, -1);
+
+            const controls = document.createElement('div');
+            controls.classList.add('controls');  // Apply the flex container class
+            controls.innerHTML =  
+                `<input type="text" id="q${index}"/>
+                <button type="button" id="resetButton" onclick="resetInput(${index})">Reset</button>
+                <button type="button" id="checkButton${index}" onclick="validateInput(${index}, '${correct}')">Check</button>`;
+
+            const koreanTranslationDiv = document.createElement('div');
+            koreanTranslationDiv.className = 'korean-translation';
+            koreanTranslationDiv.textContent = koreanTranslation;
+
+            const japaneseTranslationDiv = document.createElement('div');
+            japaneseTranslationDiv.className = 'japanese-translation';
+            japaneseTranslationDiv.textContent = japaneseTranslation;
+
+            questionContainer.appendChild(sentence);
+            questionContainer.appendChild(controls);
+            questionContainer.appendChild(koreanTranslationDiv);
+            questionContainer.appendChild(japaneseTranslationDiv);
+            container.appendChild(emojiDiv);
+            container.appendChild(questionContainer);
+            question.appendChild(container);
+
+            return question;
+        }
+
+        function updateScore() {
+            document.getElementById('score').textContent = score;
+        }
+
+        function renderExercise() {
+            const container = document.getElementById('exercise-content');
+            const exercisesDivs = document.querySelectorAll('.exercise');
+            
+            // Hide all exercises
+            exercisesDivs.forEach(exerciseDiv => exerciseDiv.style.display = 'none');
+            
+            // Show current exercise
+            const currentExerciseDiv = exercisesDivs[currentExerciseIndex];
+            currentExerciseDiv.style.display = 'block';
+
+            document.getElementById('total').textContent = exercises.length;
+
+            // Enable/disable navigation buttons
+            document.getElementById('prevButton').disabled = currentExerciseIndex === 0;
+            document.getElementById('nextButton').disabled = currentExerciseIndex === exercises.length - 1;
+        }
+
+        function navigateExercises(direction) {
+            currentExerciseIndex += direction;
+            renderExercise();
+        }
+
+        function addWordToInput(index, word, spanElement) {
+            const input = document.getElementById(`q${index}`);
+            input.value += `${word} `;
+            spanElement.classList.add('clicked');
+            spanElement.classList.remove('reversed');
+            playSound(audioWordClick); // Play the word click sound
+        }
+
+        function resetInput(index) {
+            const input = document.getElementById(`q${index}`);
+            input.value = '';
+            input.classList.remove('correct', 'incorrect');
+            const clickedWords = document.querySelectorAll(`#exercise-content .question-container span.clicked`);
+            clickedWords.forEach(span => {
+                span.classList.add('reversed');
+                span.classList.remove('clicked');
+            });
+            playSound(audioReset); // Play the reset sound
+        }
+
+        function validateInput(index, correct) {
+            const input = document.getElementById(`q${index}`);
+            const checkButton = document.getElementById(`checkButton${index}`);
+
+            if (input.value.trim() === correct) {
+                input.classList.add('correct');
+                input.classList.remove('incorrect');
+                score++;
+                checkButton.disabled = true;
+                updateScore();
+                playSound(audioCorrect); // Play the correct sound
+            } else {
+                input.classList.add('incorrect');
+                input.classList.remove('correct');
+                playSound(audioWrong); // Play the wrong sound
+            }
+        }
+
+        function playSound(audio) {
+            if (audio) {
+                audio.currentTime = 0;  // Reset the audio to the beginning
+                audio.play().catch((error) => {
+                    console.error("Error playing sound:", error);
+                });
+            }
+        }
+
+        // Initialize exercises: create and hide all exercises
+        function initializeExercises() {
+            const container = document.getElementById('exercise-content');
+            
+            exercises.forEach((exercise, index) => {
+                const exerciseElement = createExercise(index, exercise.emoji, exercise.prompts, exercise.correct, exercise.koreanTranslation, exercise.japaneseTranslation);
+                exerciseElement.classList.add('exercise');  // Add class for easy targeting
+                exerciseElement.style.display = 'none'; // Initially hide all exercises
+                container.appendChild(exerciseElement);
+            });
+            
+            renderExercise();  // Render the first exercise
+        }
+
+        // Initialize exercises when the page loads
+        initializeExercises();
+    </script>
+</body>
+</html>

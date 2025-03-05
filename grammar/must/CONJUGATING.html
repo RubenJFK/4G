@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GRAMMAR</title>
+    <style>
+        @font-face {font-family: Poppins; src: url(../fonts/Poppins-Medium.ttf);}
+        * {font-family: Poppins;}
+
+        body {margin: 0; padding: 0; background-color: #001020; color: #333; text-align: center;}
+        nav {background-color: #001f3f; padding: 10px 0; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);}
+        nav a {text-decoration: none; color: white; font-size: 16px; margin: 0 10px;}
+        nav a:hover {font-weight: bold; color: yellow; cursor: pointer;}
+        #container, #instruction-screen {padding: 20px; margin: 40px auto; width: 80%; max-width: 700px; background-color: #001b37; color: white; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); border-radius: 10px;}
+        #container {display: none;}
+        #instruction-screen button {padding: 10px 20px; font-size: 1em; cursor: pointer; background-color: #4CAF50; color: #fff; border: none; border-radius: 4px;}
+        #instruction-screen button:hover {background-color: #45a049;}
+        .sentence {font-size: 1.2em; margin: 20px 0;}
+        .input-box {width: 50%; padding: 8px; font-size: 1em;}
+        .next-button {padding: 10px 20px; font-size: 1em; cursor: pointer; background-color: #4CAF50; color: #fff; border: none; border-radius: 4px;}
+        .next-button:hover {background-color: #45a049;}
+        .score {font-size: 1.5em; margin-top: 20px; color: yellow;}
+        #emoji-container {font-size: 100px;}
+        ul {list-style-type: none;}
+        #emoji-title {font-size: 120px;}
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="./INDEX.html">↩️ Back to main menu</a>
+</nav>
+
+<div id="instruction-screen">
+    <span id="emoji-title">💻🫡</span>
+    <h2>Let's practice PAST PASSIVE VOICE!</h2>
+    <p>Instructions:</p>
+    <ul>
+        <li>Read the sentence and type the correct verb form in the input box.</li>
+        <li>Press "Enter" or click "Next" to check your answer and move to the next question.</li>
+        <li>Try to score as many points as possible!</li>
+    </ul>
+    <button id="start-btn">Start Exercise</button>
+</div>
+
+<div id="container">
+    <div id="emoji-container">🍞 📚</div>
+    <div id="sentence-container" class="sentence"></div>
+    <input type="text" id="user-input" class="input-box" placeholder="Type the verb here">
+    <button id="next-btn" class="next-button">Next</button>
+    <div id="score" class="score"></div>
+</div>
+
+<audio id="correct-sound" src="../sounds/SFX correct.wav"></audio>
+<audio id="incorrect-sound" src="../sounds/SFX wrong answer 10.wav"></audio>
+
+<script>
+    const startBtn = document.getElementById("start-btn");
+    const instructionScreen = document.getElementById("instruction-screen");
+    const container = document.getElementById("container");
+
+    startBtn.addEventListener("click", () => {
+        instructionScreen.style.display = "none";
+        container.style.display = "block";
+        loadSentence();
+    });
+
+    // Remaining JavaScript (loadSentence, checkAnswer, showScore, etc.)
+    const sentences = [
+    { text: "The hanbok ___ (design) for a traditional festival.", answer: "was designed", emojis: "👘🎨" },
+    { text: "The paintings ___ (create) during the Joseon dynasty.", answer: "were created", emojis: "🎨🏯" },
+    { text: "The calligraphy ___ (write) by a Korean scholar.", answer: "was written", emojis: "✍️📜" },
+    { text: "The ceramics ___ (make) with special techniques.", answer: "were made", emojis: "🍶🔨" },
+    { text: "The palace murals ___ (paint) on the walls of Gyeongbokgung.", answer: "were painted", emojis: "🏰🎨" },
+    { text: "The fans ___ (decorate) with beautiful patterns.", answer: "were decorated", emojis: "🎋🖌️" },
+    { text: "The traditional music ___ (perform) at the festival.", answer: "was performed", emojis: "🎵🎤" },
+    { text: "The masks ___ (carve) for Korean mask dance.", answer: "were carved", emojis: "🎭🔪" },
+    { text: "The old books ___ (restore) by museum experts.", answer: "were restored", emojis: "📚🛠️" },
+    { text: "The art exhibition ___ (visit) by many students.", answer: "was visited", emojis: "🖼️👩‍🎓" },
+    { text: "The temple bells ___ (cast) using bronze.", answer: "were cast", emojis: "🔔🛠️" },
+    { text: "The pottery ___ (glaze) with shiny colors.", answer: "was glazed", emojis: "🏺🎨" },
+    { text: "The traditional dance ___ (perform) during Chuseok.", answer: "was performed", emojis: "💃🌕" },
+    { text: "The musical instruments ___ (play) by talented musicians.", answer: "were played", emojis: "🎻🥁" },
+    { text: "The royal seals ___ (engrave) for kings and queens.", answer: "were engraved", emojis: "👑🔏" },
+    { text: "The paper ___ (make) using mulberry trees.", answer: "was made", emojis: "📜🌳" },
+    { text: "The wooden furniture ___ (carve) by hand.", answer: "was carved", emojis: "🪑🔨" },
+    { text: "The traditional songs ___ (sing) at the harvest festival.", answer: "were sung", emojis: "🎤🌾" },
+    { text: "The ink paintings ___ (create) by a famous artist.", answer: "were created", emojis: "🖌️🎨" },
+    { text: "The rice cakes ___ (prepare) for the celebration.", answer: "were prepared", emojis: "🍡🎉" },
+    { text: "The embroidery ___ (sew) on the hanbok.", answer: "was sewn", emojis: "🧵👘" },
+    { text: "The fireworks ___ (light) at the festival.", answer: "were lit", emojis: "🎆🎇" },
+    { text: "The traditional houses ___ (build) with wood and tiles.", answer: "were built", emojis: "🏠🌳" },
+    { text: "The poems ___ (write) in classical Korean.", answer: "were written", emojis: "📜✍️" },
+    { text: "The lanterns ___ (hang) along the streets.", answer: "were hung", emojis: "🏮🕯️" },
+    { text: "The costumes ___ (design) for the performance.", answer: "were designed", emojis: "👗🎭" },
+    { text: "The royal palaces ___ (restore) for tourists.", answer: "were restored", emojis: "🏰🌏" },
+    { text: "The stone statues ___ (sculpt) by ancient craftsmen.", answer: "were sculpted", emojis: "🗿🛠️" },
+    { text: "The patterns ___ (paint) on the traditional vases.", answer: "were painted", emojis: "🏺🖌️" },
+    { text: "The art books ___ (translate) into English.", answer: "were translated", emojis: "📚✍🏻" }
+];
+
+    let currentSentence = 0;
+    let score = 0;
+
+    const sentenceContainer = document.getElementById("sentence-container");
+    const userInput = document.getElementById("user-input");
+    const nextBtn = document.getElementById("next-btn");
+    const scoreDisplay = document.getElementById("score");
+    const emojiContainer = document.getElementById("emoji-container");
+    const correctSound = document.getElementById("correct-sound");
+    const incorrectSound = document.getElementById("incorrect-sound");
+
+    function loadSentence() {
+        userInput.value = "";
+        userInput.style.backgroundColor = "";
+        const { text, emojis } = sentences[currentSentence];
+        sentenceContainer.innerText = text;
+        emojiContainer.innerText = emojis;
+        userInput.focus();
+    }
+
+    function checkAnswer() {
+        const userAnswer = userInput.value.trim();
+        if (userAnswer.toLowerCase() === sentences[currentSentence].answer.toLowerCase()) {
+            userInput.style.backgroundColor = "lightgreen";
+            score++;
+            correctSound.play();
+        } else {
+            userInput.style.backgroundColor = "lightcoral";
+            incorrectSound.play();
+        }
+    }
+
+    function showScore() {
+        sentenceContainer.style.display = "none";
+        userInput.style.display = "none";
+        nextBtn.style.display = "none";
+        emojiContainer.style.display = "none";
+        scoreDisplay.innerHTML = `<span style="font-size: 80px;">🏆</span> Your score: ${score} / ${sentences.length}`;
+    }
+
+    nextBtn.addEventListener("click", () => {
+        checkAnswer();
+        currentSentence++;
+        if (currentSentence < sentences.length) {
+            setTimeout(loadSentence, 500);
+        } else {
+            showScore();
+        }
+    });
+
+    userInput.addEventListener("input", () => {
+        userInput.style.backgroundColor = "#e7e7e7";
+    });
+
+    userInput.addEventListener("keypress", (event) => {
+        if (event.key === "Enter") {
+            checkAnswer();
+            currentSentence++;
+            if (currentSentence < sentences.length) {
+                setTimeout(loadSentence, 500);
+            } else {
+                showScore();
+            }
+        }
+    });
+</script>
+</body>
+</html>

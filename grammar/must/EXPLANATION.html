@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        @font-face {font-family: Poppins; src: url(../../fonts/Poppins-Medium.ttf);}
+        * {font-family: Poppins;}
+        body {background-color: #f5f5f5; margin:0px;}
+        #superior {background-color: #0056b3; display: flex; justify-content:space-around; padding: 10px 0;}
+        #superior a {text-decoration: none; color: white; margin: 0 10px; font-size: 20px;}
+        #superior a:hover {color: yellow; font-weight: bold;}
+        section {margin: 40px; padding: 20px; background-color: white; border-radius:10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);}
+        .emoji {font-size: 200px; margin-left: 100px;}
+        .section {text-align: center; font-size: 20px; display: flex; justify-content: center; margin-top: 30px; align-items: center;}
+        #interior {display: flex; justify-content:space-around;}
+        button {padding: 10px; font-size: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);}
+    </style>
+</head>
+<body>
+<nav id="superior">
+    <a href="./INDEX.html">🔄️ Back to Main Menu</a>
+</nav>
+<section>
+    <div>
+        <nav id="interior">
+            <button id="prevButton" disabled>⏪ Previous Explanation</button>
+            <button id="nextButton">⏩ Next Explanation</button>
+        </nav>
+        <div>
+            <div class="section" id="caja1">
+                <div class="explanation">
+                    <h2>助動詞 'Must'</h2>
+                    <p>✔️ <b>義務</b>や<strong>必要性</strong>を表すときに使います。</p>
+                    <p>✔️ <b>強い推測</b>や<b>確信</b>を表すときに使います。</p>
+                </div>
+                <div class="emoji">📖</div>
+            </div>
+            <div class="section" id="caja2" style="display: none;">
+                <div class="explanation">
+                    <h2>1. 義務</h2>
+                    <p>何かをしなければならないという義務や必要性を表します。</p>
+                    <p><strong>例:</strong></p>
+                    <p>I <strong>must</strong> study for the exam. (私は試験のために勉強しなければなりません。)</p>
+                    <p>She <strong>must</strong> finish her homework. (彼女は宿題を終わらせなければなりません。)</p>
+                    <p>We <strong>must</strong> wear a uniform at school. (私たちは学校で制服を着なければなりません。)</p>
+                    <p>You <strong>must</strong> clean your room. (あなたは部屋を掃除しなければなりません。)</p>
+                    <p>They <strong>must</strong> leave now. (彼らは今すぐ出発しなければなりません。)</p>
+                </div>
+                <div class="emoji">💼</div>
+            </div>
+            <div class="section" id="caja3" style="display: none;">
+                <div class="explanation">
+                    <h2>2. 強い推測</h2>
+                    <p>何かが確かにそうであると思うときに使います。</p>
+                    <p><strong>例:</strong></p>
+                    <p>He <strong>must</strong> be at home. (彼は家にいるに違いありません。)</p>
+                    <p>She <strong>must</strong> be tired after the long trip. (彼女は長い旅行の後で疲れているに違いありません。)</p>
+                    <p>It <strong>must</strong> be raining outside. (外は雨が降っているに違いありません。)</p>
+                    <p>You <strong>must</strong> be joking! (あなたは冗談を言っているに違いありません！)</p>
+                </div>
+                <div class="emoji">🤔</div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    const nextButton = document.getElementById('nextButton');
+    const prevButton = document.getElementById('prevButton');
+    const sections = document.querySelectorAll('.section');
+    let currentSection = 0;
+
+    // Initially show the first section and hide the others
+    function setSectionVisibility() {
+        sections.forEach((section, index) => {
+            if (index === currentSection) {
+                section.style.display = 'flex'; // Show the current section
+            } else {
+                section.style.display = 'none'; // Hide all other sections
+            }
+        });
+        // Disable/enable buttons based on the current section
+        prevButton.disabled = currentSection === 0;
+        nextButton.disabled = currentSection === sections.length - 1;
+    }
+
+    // Set the visibility when the page loads
+    setSectionVisibility();
+
+    nextButton.addEventListener('click', () => {
+        if (currentSection < sections.length - 1) {
+            currentSection++;
+            setSectionVisibility(); // Update visibility after moving to the next section
+        }
+    });
+
+    prevButton.addEventListener('click', () => {
+        if (currentSection > 0) {
+            currentSection--;
+            setSectionVisibility(); // Update visibility after moving to the previous section
+        }
+    });
+</script>
+</body>
+</html>
